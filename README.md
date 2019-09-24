@@ -10,6 +10,5 @@ Name | Description
 [errors.md](./errors.md) | Descriptions of possible error messages from the Rest API
 [web-socket-streams.md](./web-socket-streams.md) | Details on available streams and payloads
 [user-data-stream.md](./user-data-stream.md) | Details on the dedicated account stream
-[wapi-api.md](./wapi-api.md) | Details on the Withdrawal API (/wapi)
 [margin-api.md](./margin-api.md) | Details on the Margin Trade API (/sapi)
 
