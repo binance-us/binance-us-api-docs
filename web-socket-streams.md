@@ -11,13 +11,15 @@
   - [All Market Mini Tickers Stream](#all-market-mini-tickers-stream)
   - [Individual Symbol Ticker Streams](#individual-symbol-ticker-streams)
   - [All Market Tickers Stream](#all-market-tickers-stream)
+  - [Individual Symbol Book Ticker Streams](#individual-symbol-book-ticker-streams)
+  - [All Book Tickers Stream](#all-book-tickers-stream)
   - [Partial Book Depth Streams](#partial-book-depth-streams)
   - [Diff. Depth Stream](#diff-depth-stream)
   - [How to manage a local order book correctly](#how-to-manage-a-local-order-book-correctly)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# Web Socket Streams for Binance (2019-09-03)
+# Web Socket Streams for Binance (2019-10-16)
 # General WSS information
 * The base endpoint is: **wss://stream.binance.us:9443**
 * Streams can be accessed either in a single raw stream or in a combined stream
@@ -171,7 +173,7 @@ m -> minutes; h -> hours; d -> days; w -> weeks; M -> months
 ```
 
 ## Individual Symbol Ticker Streams
-24hr rollwing window ticker statistics for a single symbol. These are NOT the statistics of the UTC day, but a 24hr rolling window for the previous 24hrs.
+24hr rolling window ticker statistics for a single symbol. These are NOT the statistics of the UTC day, but a 24hr rolling window for the previous 24hrs.
 
 **Stream Name:** \<symbol\>@ticker
 
@@ -221,6 +223,40 @@ m -> minutes; h -> hours; d -> days; w -> weeks; M -> months
   }
 ]
 ```
+
+## Individual Symbol Book Ticker Streams
+Pushes any update to the best bid or ask's price or quantity in real-time for a specified symbol.
+
+**Stream Name:** \<symbol\>@bookTicker
+
+**Update Speed:** Real-time
+
+**Payload:**
+```javascript
+{
+  "u":400900217,     // order book updateId
+  "s":"BNBUSDT",     // symbol
+  "b":"25.35190000", // best bid price
+  "B":"31.21000000", // best bid qty
+  "a":"25.36520000", // best ask price
+  "A":"40.66000000"  // best ask qty
+}
+```
+
+## All Book Tickers Stream
+Pushes any update to the best bid or ask's price or quantity in real-time for all symbols.
+
+**Stream Name:** !bookTicker
+
+**Update Speed:** Real-time
+
+**Payload:**
+```javascript
+{
+  // Same as <symbol>@bookTicker payload
+}
+```
+
 
 ## Partial Book Depth Streams
 Top **\<levels\>** bids and asks, pushed every second. Valid **\<levels\>** are 5, 10, or 20.
