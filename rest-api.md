@@ -3,7 +3,13 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [General API Information](#general-api-information)
+  - [HTTP Return Codes](#http-return-codes)
+  - [Error Codes](#error-codes)
+  - [General Information on Endpoints](#general-information-on-endpoints)
 - [LIMITS](#limits)
+  - [General Info on Limits](#general-info-on-limits)
+  - [IP Limits](#ip-limits)
+  - [Order Rate Limits](#order-rate-limits)
 - [Endpoint security type](#endpoint-security-type)
 - [SIGNED (TRADE and USER_DATA) Endpoint security](#signed-trade-and-user_data-endpoint-security)
   - [Timing security](#timing-security)
@@ -63,21 +69,29 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# Public Rest API for Binance (2019-08-15)
+# Public Rest API for Binance (2019-10-16)
 # General API Information
 * The base endpoint is: **https://api.binance.us**
 * All endpoints return either a JSON object or array.
 * Data is returned in **ascending** order. Oldest first, newest last.
-* All time and timestamp related fields are in milliseconds.
+* All time and timestamp related fields are in **milliseconds**.
+
+## HTTP Return Codes
+
 * HTTP `4XX` return codes are used for malformed requests;
   the issue is on the sender's side.
+* HTTP `403` return code is used when the WAF Limit (Web Application Firewall) has been violated.
 * HTTP `429` return code is used when breaking a request rate limit.
 * HTTP `418` return code is used when an IP has been auto-banned for continuing to send requests after receiving `429` codes.
 * HTTP `5XX` return codes are used for internal errors; the issue is on
   Binance's side.
   It is important to **NOT** treat this as a failure operation; the execution status is
   **UNKNOWN** and could have been a success.
-* Any endpoint can return an ERROR; the error payload is as follows:
+
+## Error Codes
+* Any endpoint can return an ERROR
+
+Sample Error below:
 ```javascript
 {
   "code": -1121,
@@ -85,7 +99,9 @@
 }
 ```
 
-* Specific error codes and messages defined in another document.
+* Specific error codes and messages are defined in [Error Codes](./errors.md)
+
+## General Information on Endpoints
 * For `GET` endpoints, parameters must be sent as a `query string`.
 * For `POST`, `PUT`, and `DELETE` endpoints, the parameters may be sent as a
   `query string` or in the `request body` with content type
@@ -96,24 +112,35 @@
   `query string` parameter will be used.
 
 # LIMITS
+
+## General Info on Limits
 * The following `intervalLetter` values for headers:
     * SECOND => S
     * MINUTE => M
     * HOUR => H
     * DAY => D
-* The `/api/v1/exchangeInfo` `rateLimits` array contains objects related to the exchange's `RAW_REQUEST`, `REQUEST_WEIGHT`, and `ORDER` rate limits. These are further defined in the `ENUM definitions` section under `Rate limiters (rateLimitType)`.
+* The `/api/v3/exchangeInfo` `rateLimits` array contains objects related to the exchange's `RAW_REQUEST`, `REQUEST_WEIGHT`, and `ORDER` rate limits. These are further defined in the `ENUM definitions` section under `Rate limiters (rateLimitType)`.
 * A 429 will be returned when either rate limit is violated.
 * Each route has a `weight` which determines for the number of requests each endpoint counts for. Heavier endpoints and endpoints that do operations on multiple symbols will have a heavier `weight`.
+
+## IP Limits
 * Every request will contain `X-MBX-USED-WEIGHT-(intervalNum)(intervalLetter)` headers which has the current used weight for the IP for all request rate limiters defined.
 * Every successful order will contain a `X-MBX-ORDER-COUNT-(intervalNum)(intervalLetter)` header which has the current order count for the IP for all order rate limiters defined. Rejected/unsuccessful orders are not guaranteed to have `X-MBX-ORDER-COUNT-**` headers in the response.
 * When a 429 is received, it's your obligation as an API to back off and not spam the API.
 * **Repeatedly violating rate limits and/or failing to back off after receiving 429s will result in an automated IP ban (HTTP status 418).**
 * IP bans are tracked and **scale in duration** for repeat offenders, **from 2 minutes to 3 days**.
 * A `Retry-After` header is sent with a 418 or 429 responses and will give the **number of seconds** required to wait, in the case of a 418, to prevent a ban, or, in the case of a 429, until the ban is over.
+* **The limits on the API are based on the IPs, not the API keys.**
+
+## Order Rate Limits
+* Every successful order response will contain a `X-MBX-ORDER-COUNT-(intervalNum)(intervalLetter)` header which has the current order count for the IP for all order rate limiters defined.
+* Rejected/unsuccessful orders are not guaranteed to have `X-MBX-ORDER-COUNT-**` headers in the response.
+* **The order rate limit is counted against each account**.
 
 # Endpoint security type
 * Each endpoint has a security type that determines the how you will
-  interact with it.
+  interact with it. This is stated next to the NAME of the endpoint.
+    * If no security type is stated, assume the security type is NONE.
 * API-keys are passed into the Rest API via the `X-MBX-APIKEY`
   header.
 * API-keys and secret-keys **are case sensitive**.
@@ -164,7 +191,7 @@ processed within a certain number of milliseconds or be rejected by the
 server.
 
 
-**It recommended to use a small recvWindow of 5000 or less! The max cannot go beyond 60,000!**
+**It is recommended to use a small recvWindow of 5000 or less! The max cannot go beyond 60,000!**
 
 
 ## SIGNED Endpoint Examples for POST /api/v3/order
@@ -370,7 +397,7 @@ m -> minutes; h -> hours; d -> days; w -> weeks; M -> months
 ## General endpoints
 ### Test connectivity
 ```
-GET /api/v1/ping
+GET /api/v3/ping
 ```
 Test connectivity to the Rest API.
 
@@ -387,7 +414,7 @@ NONE
 
 ### Check server time
 ```
-GET /api/v1/time
+GET /api/v3/time
 ```
 Test connectivity to the Rest API and get the current server time.
 
@@ -406,7 +433,7 @@ NONE
 
 ### Exchange information
 ```
-GET /api/v1/exchangeInfo
+GET /api/v3/exchangeInfo
 ```
 Current exchange trading rules and symbol information
 
@@ -439,6 +466,8 @@ NONE
       "baseAssetPrecision": 8,
       "quoteAsset": "BTC",
       "quotePrecision": 8,
+      "baseCommissionPrecision": 8,
+      "quoteCommissionPrecision": 8,
       "orderTypes": [
         "LIMIT",
         "LIMIT_MAKER",
@@ -464,7 +493,7 @@ NONE
 ## Market Data endpoints
 ### Order book
 ```
-GET /api/v1/depth
+GET /api/v3/depth
 ```
 
 **Weight:**
@@ -508,7 +537,7 @@ limit | INT | NO | Default 100; max 5000. Valid limits:[5, 10, 20, 50, 100, 500,
 
 ### Recent trades list
 ```
-GET /api/v1/trades
+GET /api/v3/trades
 ```
 Get recent trades (up to last 500).
 
@@ -539,7 +568,7 @@ limit | INT | NO | Default 500; max 1000.
 
 ### Old trade lookup (MARKET_DATA)
 ```
-GET /api/v1/historicalTrades
+GET /api/v3/historicalTrades
 ```
 Get older trades.
 
@@ -571,7 +600,7 @@ fromId | LONG | NO | TradeId to fetch from. Default gets most recent trades.
 
 ### Compressed/Aggregate trades list
 ```
-GET /api/v1/aggTrades
+GET /api/v3/aggTrades
 ```
 Get compressed, aggregate trades. Trades that fill at the time, from the same
 order, with the same price will have the quantity aggregated.
@@ -610,7 +639,7 @@ limit | INT | NO | Default 500; max 1000.
 
 ### Kline/Candlestick data
 ```
-GET /api/v1/klines
+GET /api/v3/klines
 ```
 Kline/candlestick bars for a symbol.
 Klines are uniquely identified by their open time.
@@ -677,7 +706,7 @@ symbol | STRING | YES |
 
 ### 24hr ticker price change statistics
 ```
-GET /api/v1/ticker/24hr
+GET /api/v3/ticker/24hr
 ```
 24 hour rolling window price change statistics. **Careful** when accessing this with no symbol.
 
@@ -1187,11 +1216,11 @@ price|DECIMAL|YES|
 limitIcebergQty|DECIMAL|NO|
 stopClientOrderId |STRING|NO| A unique Id for the stop loss/stop loss limit leg
 stopPrice |DECIMAL| YES
-stopLimitPrice|DECIMAL|NO
+stopLimitPrice|DECIMAL|NO| If provided, `stopLimitTimeInForce` is required.
 stopIcebergQty|DECIMAL|NO|
 stopLimitTimeInForce|ENUM|NO| Valid values are ```GTC```/```FOK```/```IOC```
 newOrderRespType|ENUM|NO| Set the response JSON.
-recvWindow|LONG|NO| The value cannot be greater than ```60000```
+recvWindow|LONG|NO| The value cannot be greater than `60000`
 timestamp|LONG|YES|
 
 
@@ -1200,7 +1229,7 @@ Other Info:
     * ```SELL```: Limit Price > Last Price > Stop Price
     * ```BUY```: Limit Price < Last Price < Stop Price
 * Quantity Restrictions:
-    * Both legs must have the same quantity
+    * Both legs must have the same quantity.
     * ```ICEBERG``` quantities however do not have to be the same
 
 **Response:**
@@ -1540,7 +1569,7 @@ Specifics on how user data streams work is in another document.
 
 ### Start user data stream (USER_STREAM)
 ```
-POST /api/v1/userDataStream
+POST /api/v3/userDataStream
 ```
 Start a new user data stream. The stream will close after 60 minutes unless a keepalive is sent.
 
@@ -1559,7 +1588,7 @@ NONE
 
 ### Keepalive user data stream (USER_STREAM)
 ```
-PUT /api/v1/userDataStream
+PUT /api/v3/userDataStream
 ```
 Keepalive a user data stream to prevent a time out. User data streams will close after 60 minutes. It's recommended to send a ping about every 30 minutes.
 
@@ -1579,7 +1608,7 @@ listenKey | STRING | YES
 
 ### Close user data stream (USER_STREAM)
 ```
-DELETE /api/v1/userDataStream
+DELETE /api/v3/userDataStream
 ```
 Close out a user data stream.
 
