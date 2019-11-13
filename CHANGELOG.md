@@ -1,5 +1,9 @@
 # CHANGELOG for Binance's API (2019-10-16)
 ---
+## 2019-11-13
+### WEB SOCKET STREAM
+* WSS now supports live subscribing/unsubscribing to streams.
+---
 ## 2019-09-09
 * New WebSocket streams for bookTickers added: `<symbol>@bookTicker` and `!bookTicker`. See `web-socket-streams.md` for details.
 
