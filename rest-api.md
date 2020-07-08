@@ -39,6 +39,7 @@
     - [Test new order (TRADE)](#test-new-order-trade)
     - [Query order (USER_DATA)](#query-order-user_data)
     - [Cancel order (TRADE)](#cancel-order-trade)
+    - [Cancel all Open Orders on a Symbol (TRADE)](#cancel-all-open-orders-on-a-symbol-trade)
     - [Current open orders (USER_DATA)](#current-open-orders-user_data)
     - [All orders (USER_DATA)](#all-orders-user_data)
     - [New OCO (TRADE)](#new-oco-trade)
@@ -70,7 +71,7 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# Public Rest API for Binance (2020-03-24)
+# Public Rest API for Binance (2020-07-09)
 # General API Information
 * The base endpoint is: **https://api.binance.us**
 * All endpoints return either a JSON object or array.
@@ -467,6 +468,7 @@ NONE
       "baseAssetPrecision": 8,
       "quoteAsset": "BTC",
       "quotePrecision": 8,
+      "quoteAssetPrecision": 8,
       "baseCommissionPrecision": 8,
       "quoteCommissionPrecision": 8,
       "orderTypes": [
@@ -480,6 +482,7 @@ NONE
       ],
       "icebergAllowed": true,
       "ocoAllowed": true,
+      "quoteOrderQtyMarketAllowed": true,
       "isSpotTradingAllowed": true,
       "isMarginTradingAllowed": false,
       "filters": [
@@ -487,6 +490,9 @@ NONE
         //All filters are optional
       ]
     }
+  ],
+  "permissions": [
+     "SPOT"
   ]
 }
 ```
@@ -877,7 +883,8 @@ symbol | STRING | YES |
 side | ENUM | YES |
 type | ENUM | YES |
 timeInForce | ENUM | NO |
-quantity | DECIMAL | YES |
+quantity | DECIMAL | NO |
+quoteOrderQty|DECIMAL|NO|
 price | DECIMAL | NO |
 newClientOrderId | STRING | NO | A unique id for the order. Automatically generated if not sent.
 stopPrice | DECIMAL | NO | Used with `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`, and `TAKE_PROFIT_LIMIT` orders.
@@ -891,7 +898,7 @@ Additional mandatory parameters based on `type`:
 Type | Additional mandatory parameters
 ------------ | ------------
 `LIMIT` | `timeInForce`, `quantity`, `price`
-`MARKET` | `quantity`
+`MARKET` | `quantity` or `quoteOrderQty`
 `STOP_LOSS` | `quantity`, `stopPrice`
 `STOP_LOSS_LIMIT` | `timeInForce`, `quantity`,  `price`, `stopPrice`
 `TAKE_PROFIT` | `quantity`, `stopPrice`
@@ -904,6 +911,9 @@ Other info:
 * `STOP_LOSS` and `TAKE_PROFIT` will execute a `MARKET` order when the `stopPrice` is reached.
 * Any `LIMIT` or `LIMIT_MAKER` type order can be made an iceberg order by sending an `icebergQty`.
 * Any order with an `icebergQty` MUST have `timeInForce` set to `GTC`.
+* `MARKET` orders using `quantity` specifies how much a user wants to buy or sell based on the market price.
+* `MARKET` orders using `quoteOrderQty` specifies the amount the user wants to spend (when buying) or receive (when selling) of the quoteAsset; the correct `quantity` will be determined based on the market liquidity and `quoteOrderQty`
+* A `newClientOrderId` can be reused only when the previous one is filled, otherwise the order will be rejected.
 
 
 Trigger order price rules against market price for both MARKET and LIMIT versions:
@@ -1055,7 +1065,8 @@ Notes:
   "icebergQty": "0.0",
   "time": 1499827319559,
   "updateTime": 1499827319559,
-  "isWorking": true
+  "isWorking": true,
+  "origQuoteOrderQty": "0.000000"
 }
 ```
 
@@ -1100,6 +1111,24 @@ Either `orderId` or `origClientOrderId` must be sent.
 }
 ```
 
+### Cancel all Open Orders on a Symbol (TRADE)
+```
+DELETE /api/v3/openOrders
+```
+Cancels all active orders on a symbol.
+This includes OCO orders.
+
+**Weight**: 
+1
+
+**Parameters**
+Name | Type | Mandatory | Description
+------------ | ------------ | ------------ | ------------
+symbol | STRING| YES|
+recvWindow|LONG|NO|  The value cannot be greater than `60000`.
+timestamp|LONG|YES| 
+
+
 ### Current open orders (USER_DATA)
 ```
 GET /api/v3/openOrders  (HMAC SHA256)
@@ -1139,7 +1168,8 @@ timestamp | LONG | YES |
     "icebergQty": "0.0",
     "time": 1499827319559,
     "updateTime": 1499827319559,
-    "isWorking": true
+    "isWorking": true,
+    "origQuoteOrderQty": "0.000000"
   }
 ]
 ```
@@ -1189,7 +1219,8 @@ timestamp | LONG | YES |
     "icebergQty": "0.0",
     "time": 1499827319559,
     "updateTime": 1499827319559,
-    "isWorking": true
+    "isWorking": true,
+    "origQuoteOrderQty": "0.000000"
   }
 ]
 ```
@@ -1575,6 +1606,9 @@ timestamp | LONG | YES |
       "free": "4763368.68006011",
       "locked": "0.00000000"
     }
+  ],
+  "permissions": [
+     "SPOT"
   ]
 }
 ```

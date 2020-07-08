@@ -1,8 +1,54 @@
-# CHANGELOG for Binance's API (2020-04-23)
+# CHANGELOG for Binance's API (2020-07-09)
+
+---
+## 2020-07-09
+
+### REST API
+* `api/v3/exchangeInfo` has new fields:
+    * `quoteOrderQtyMarketAllowed`
+        * Indicates whether Quote Order Qty `MARKET` orders are enabled on a symbol.
+    * `quoteAssetPrecision`
+        * This is a duplicate of the `quotePrecision` field. `quotePrecision` will be removed in future API versions (v4+).
+* MARKET orders have a new optional field: `quoteOrderQty` to specify the total `quoteOrderQty` spent or received on a `MARKET` order.
+    * Quote Order Qty `MARKET` orders will not break `LOT_SIZE` filter rules; the order will execute a quantity that will have the notional value as close as possible to the `quoteOrderQty`
+    * Using `BNBBTC` as an example:
+        * On the `BUY` side, the order will buy as many BNB as `quoteOrderQty` BTC can.
+        * On the `SELL` side, the order will sell as much BNB as needed to receive `quoteOrderQty` BTC.
+* All order query endpoints will return a new field `origQuoteOrderQty` in the JSON payload. (e.g. GET api/v3/allOrders)
+* New field `permissions`
+    * Defines the trading permissions that allowed on accounts and symbols
+    * `permissions` is an enum array;values:
+        * `SPOT`
+        * `MARGIN`
+    * `permissions` will replace `isSpotTradingAllowed` and `isMarginTradingAllowed` on `GET api/v3/exchangeInfo` in future API versions (v4+).
+    * For an account to trade on a symbol, the account and symbol must share at least 1 permission in common.
+* Updates to `GET api/v3/account`
+    * New field `permissions` added.
+* New endpoint `DELETE /api/v3/openOrders`
+    * This will allow a user to cancel all open orders on a single symbol.
+    * This will cancel all open orders including OCO orders.
+* Updated error messages for -1003 to specify the limit is referring to the request weight, not to the number of requests.
+* Updated error messages for -1128:
+    * Sending an `OCO` with a `stopLimitPrice` without a `stopLimitTimeInForce` will return this message:
+
+   ```javascript
+      {
+        "code": -1128,
+        "msg": "Combination of optional parameters invalid. Recommendation: 'stopLimitTimeInForce' should also be sent."
+      }
+   ```
+
+
+### USER DATA STREAM
+
+* `OutboundAccountInfo` has a new field `P` which shows the trading permissions of the account.
+* `executionReport` has a new field `Q` which shows the quoteOrderQty of an order.
+* `balanceUpdate` event type added
+    * This event occurs when funds are deposited or withdrawn from the account. 
 
 ---
 ## 2020-04-23
-WEB SOCKET STREAM
+### WEB SOCKET STREAM
 
 * WebSocket connections have a limit of 5 incoming messages per second. A message is considered:
     * A PING frame

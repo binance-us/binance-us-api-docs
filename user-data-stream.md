@@ -10,10 +10,11 @@
 - [Web Socket Payloads](#web-socket-payloads)
   - [Account Update](#account-update)
   - [Order Update](#order-update)
+  - [Balance Update](#balance-update)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# User Data Streams for Binance (2019-11-18)
+# User Data Streams for Binance (2020-07-09)
 # General WSS information
 * The base API endpoint is: **https://api.binance.us**
 * A User Data Stream `listenKey` is valid for 60 minutes after creation.
@@ -127,7 +128,10 @@ Account state is updated with the `outboundAccountInfo` event.
       "f": "0.00000000",
       "l": "0.00000000"
     }
-  ]
+  ],
+  "P": [
+    "SPOT"
+  ]  
 }
 ```
 
@@ -172,7 +176,7 @@ Average price can be found by doing `Z` divided by `z`.
   "P": "0.00000000",             // Stop price
   "F": "0.00000000",             // Iceberg quantity
   "g": -1,                       // OrderListId
-  "C": "null",                   // Original client order ID; This is the ID of the order being canceled
+  "C": "",                       // Original client order ID; This is the ID of the order being canceled
   "x": "NEW",                    // Current execution type
   "X": "NEW",                    // Current order status
   "r": "NONE",                   // Order reject reason; will be an error code.
@@ -190,14 +194,15 @@ Average price can be found by doing `Z` divided by `z`.
   "M": false,                    // Ignore
   "O": 1499405658657,            // Order creation time
   "Z": "0.00000000",             // Cumulative quote asset transacted quantity
-  "Y": "0.00000000"              // Last quote asset transacted quantity (i.e. lastPrice * lastQty)
+  "Y": "0.00000000",             // Last quote asset transacted quantity (i.e. lastPrice * lastQty)
+  "Q": "0.00000000"              //Quote Order Quantity
 }
 ```
 
 **Execution types:**
 
 * NEW - The order has been accepted into the engine.
-* CANCELED - The order has been canceled by the user. 
+* CANCELED - The order has been canceled by the user.
 * REPLACED (currently unused)
 * REJECTED - The order has been rejected and was not processed. (This is never pushed into the User Data Stream)
 * TRADE - Part of the order or all of the order's quantity has filled.
@@ -232,4 +237,23 @@ If the order is an OCO, an event will be displayed named `ListStatus` in additio
   ]
 }
 ```
+
+## Balance Update
+
+Balance Update occurs during deposit or withdrawals from the account.
+
+**Payload**
+
+```javascript
+{
+  "e": "balanceUpdate",         //Event Type
+  "E": 1573200697110,           //Event Time
+  "a": "BTC",                   //Asset
+  "d": "100.00000000",          //Balance Delta
+  "T": 1573200697068            //Clear Time
+}
+
+```
+
+
 

@@ -1,4 +1,4 @@
-# Error codes for Binance (2019-10-16)
+# Error codes for Binance (2020-07-09)
 Errors consist of two parts: an error code and a message. Codes are universal,
  but messages can vary. Here is the error JSON payload:
 ```javascript
@@ -23,7 +23,7 @@ Errors consist of two parts: an error code and a message. Codes are universal,
  * Too many requests queued.
  * Too many requests; please use the websocket for live updates.
  * Too many requests; current limit is %s requests per minute. Please use the websocket for live updates to avoid polling the API.
- * Way too many requests; IP banned until %s. Please use the websocket for live updates to avoid bans.
+ * Way too much request weight used; IP banned until %s. Please use the websocket for live updates to avoid bans.
 
 #### -1006 UNEXPECTED_RESP
  * An unexpected response was received from the message bus. Execution status unknown.
