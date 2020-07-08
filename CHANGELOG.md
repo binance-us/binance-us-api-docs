@@ -37,7 +37,7 @@
         "msg": "Combination of optional parameters invalid. Recommendation: 'stopLimitTimeInForce' should also be sent."
       }
    ```
-
+* Orders can be canceled via the API on symbols in the `BREAK` or `HALT` status.
 
 ### USER DATA STREAM
 
