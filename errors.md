@@ -171,7 +171,7 @@ Error message | Description
 "Order would immediately match and take." | `LIMIT_MAKER` order type would immediately match and trade, and not be a pure maker order.
 "The relationship of the prices for the orders is not correct." | The prices set in the `OCO` is breaking the Price rules. <br> The rules are: <br> `SELL Orders`: Limit Price > Last Price > Stop Price <br>`BUY Orders`: Limit Price < Last Price < Stop Price
 "OCO orders are not supported for this symbol" | `OCO` is not enabled on the symbol
-
+"Quote order qty market orders are not support for this symbol." | `MARKET` orders using the parameter `quoteOrderQty` are not enabled on this symbol.
 
 ## -9xxx Filter failures
 Error message | Description
