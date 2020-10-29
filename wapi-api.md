@@ -291,7 +291,7 @@ timestamp | LONG | YES
             "applyTime": 1508198532000,
             "status": 4
         }
-    ],
+    ]
     "success": true
 }
 ```
@@ -338,18 +338,8 @@ timestamp | Long | YES
             "amount": "65",
 	    "transactionFee": "20",
             "platformFee": "0"
-        },
-        {
-            "orderId": "EW572707382150098944",
-            "paymentChannel": "Epay",
-            "orderStatus": "Failed",
-            "amount": "10",
-            "transactionFee": "0",
-	    "platformFee": "0"
-            "applyTime": 1508198532000,
-            "status": 4
         }
-    ],
+    ]
 }
 ```
 
