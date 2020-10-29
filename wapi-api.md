@@ -323,6 +323,7 @@ recvWindow | Long | NO
 timestamp | Long | YES
 
 Please pay attention to the default value of startTime & endTime
+
 If both startTime and endTime are sent, the duration between startTime and endTime must be greater than 0 day and less than 90 days.
 
 **Response:**
