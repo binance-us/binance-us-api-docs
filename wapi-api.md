@@ -1,4 +1,4 @@
-# Public WAPI for Binance (2018-07-18)
+# Public WAPI for Binance (2020-10-29)
 # General API Information
 * The base endpoint is: **https://api.binance.us**
 * All endpoints return either a JSON object or array.
@@ -141,7 +141,7 @@ Note that for wapi, parameters must be sent in query strings.
 ```
 POST /wapi/v3/withdraw.html (HMAC SHA256)
 ```
-Submit a withdraw request.
+Submit a crypto withdraw request.
 
 **Weight:**
 1
@@ -165,6 +165,39 @@ timestamp | LONG | YES
     "id":"7213fea8e94b4a5593d507237e5a555b"
 }
 ```
+
+
+
+### FIAT (USD) Withdraw via Silvergate Exchange Network (SEN)
+```
+POST /sapi/v1/fiatpayment/apply/withdraw (HMAC SHA256)
+```
+Submit a USD withdraw request via Silvergate Exchange Network (SEN).
+
+**Weight:**
+1
+
+**Parameters:**
+
+Name | Type | Mandatory | Description
+------------ | ------------ | ------------ | ------------
+paymentChannel	|  STRING | NO | default value="SILVERGATE"
+paymentMethod	 | STRING | NO | default value="SEN"	
+paymentAccount | STRING | YES | The account to which the user wants to withdraw funds
+fiatCurrency | STRING | NO | default value="USD"	
+amount | DECIMAL | YES | The amount
+recvWindow | LONG | NO	
+timestamp | LONG | YES	
+
+**Response:**
+```javascript
+{
+    "orderId": "6c2ff984890145fdac2b7160299062f0"
+}
+```
+
+
+
 
 
 ### Deposit History (USER_DATA)
@@ -218,7 +251,7 @@ timestamp | LONG | YES
 ```
 GET /wapi/v3/withdrawHistory.html (HMAC SHA256)
 ```
-Fetch withdraw history.
+Fetch crypto withdraw history.
 
 **Weight:**
 1
@@ -262,6 +295,64 @@ timestamp | LONG | YES
     "success": true
 }
 ```
+
+
+
+
+### FIAT (USD) Withdraw History (USER_DATA)
+```
+GET /sapi/v1/fiatpayment/query/withdraw/history (HMAC SHA256)
+```
+Fetch USD withdraw history.
+
+**Weight:**
+1
+
+**Parameters:**
+
+Name | Type | Mandatory | Description
+------------ | ------------ | ------------ | ------------
+fiatCurrency | STRING | NO	
+orderId | STRING | NO 
+offset | INT | NO	
+paymentChannel | STRING | NO	
+paymentMethod | STRING | NO	
+startTime | LONG | NO | Default to 90 days from current timestamp	
+endTime | LONG | NO | Default to current timestamp
+recvWindow | Long | NO
+timestamp | Long | YES
+
+Please pay attention to the default value of startTime & endTime
+If both startTime and endTime are sent, the duration between startTime and endTime must be greater than 0 day and less than 90 days.
+
+**Response:**
+```javascript
+{
+    "withdrawRecordList": [
+        {
+            "orderId":"6c2ff984890145fdac2b7160299062f0",
+            "paymentAccount": "4a992541-c12d-4cca-bbd6-df637f801526",
+            "paymentChannel": "PRIMETRUST",
+            "paymentMethod": "WIRE_INTERNATIONAL",
+            "orderStatus": "Processing",
+            "amount": "65",
+	    "transactionFee": "20",
+            "platformFee": "0"
+        },
+        {
+            "orderId": "EW572707382150098944",
+            "paymentChannel": "Epay",
+            "orderStatus": "Failed",
+            "amount": "10",
+            "transactionFee": "0",
+	    "platformFee": "0"
+            "applyTime": 1508198532000,
+            "status": 4
+        }
+    ],
+}
+```
+
 
 
 
