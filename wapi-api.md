@@ -247,6 +247,56 @@ timestamp | LONG | YES
 }
 ```
 
+
+### FIAT (USD) Deposit History (USER_DATA)
+```
+GET /sapi/v1/fiatpayment/query/deposit/history (HMAC SHA256)
+```
+Fetch USD deposit history.
+
+**Weight:**
+1
+
+**Parameters:**
+
+Name | Type | Mandatory | Description
+------------ | ------------ | ------------ | ------------
+fiatCurrency | STRING | NO	
+orderId | STRING | NO 
+offset | INT | NO	
+paymentChannel | STRING | NO	
+paymentMethod | STRING | NO	
+startTime | LONG | NO | Default to 90 days from current timestamp	
+endTime | LONG | NO | Default to current timestamp
+recvWindow | Long | NO
+timestamp | Long | YES
+
+* Please pay attention to the default value of startTime & endTime
+* If both startTime and endTime are sent, the duration between startTime and endTime must be greater than 0 day and less than 90 days.
+
+**Response:**
+```javascript
+{
+    "assetLogRecordList": [
+        {
+            "orderId":"a1d377c72de544f2ba881399f5ad36bb",
+            "paymentAccount": "4a992541-c12d-4cca-bbd6-df637f801526",
+            "paymentChannel": "Silvergate",
+            "paymentMethod": "SEN",
+            "orderStatus": "Failed",
+            "amount": "0.95",
+	    "transactionFee": "0.05",
+            "platformFee": "0"
+        }
+    ]
+}
+```
+
+
+
+
+
+
 ### Withdraw History (USER_DATA)
 ```
 GET /wapi/v3/withdrawHistory.html (HMAC SHA256)
@@ -328,7 +378,7 @@ timestamp | Long | YES
 **Response:**
 ```javascript
 {
-    "withdrawRecordList": [
+    "assetLogRecordList": [
         {
             "orderId":"6c2ff984890145fdac2b7160299062f0",
             "paymentAccount": "4a992541-c12d-4cca-bbd6-df637f801526",
