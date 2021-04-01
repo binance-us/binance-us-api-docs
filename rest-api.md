@@ -140,7 +140,7 @@ Sample Error below:
 * **The order rate limit is counted against each account**.
 
 # Endpoint security type
-* Each endpoint has a security type that determines the how you will
+* Each endpoint has a security type that determines how you will
   interact with it. This is stated next to the NAME of the endpoint.
     * If no security type is stated, assume the security type is NONE.
 * API-keys are passed into the Rest API via the `X-MBX-APIKEY`
