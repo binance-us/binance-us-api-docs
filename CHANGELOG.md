@@ -1,4 +1,9 @@
-# CHANGELOG for Binance's API (2020-07-09)
+# CHANGELOG for Binance's API (2021-05-12)
+
+---
+## 2021-05-12
+* Added `Data Source` in the documentation to explain where each endpoint is retrieving its data.
+* Added field `Data Source` to each API endpoint in the documentation
 
 ---
 ## 2020-07-09
