@@ -1,4 +1,22 @@
-# CHANGELOG for Binance's API (2021-05-12)
+# CHANGELOG for Binance's API (2021-06-21)
+
+---
+## 2021-06-21
+
+### USER DATA STREAM
+* `outboundAccountInfo` has been removed
+
+### REST API
+* `GET api/v3/exchangeInfo` now supports single and multi-symbol query.
+* The weights to the following endpoints will be adjusted:
+    * `GET /api/v3/order` weight increased to 2
+    * `GET /api/v3/openOrders` weight increased to 3
+    * `GET /api/v3/allOrders` weight increased to 10
+    * `GET /api/v3/orderList` weight increased to 2
+    * `GET /api/v3/openOrderList` weight increased to 3
+    * `GET /api/v3/account` weight increased to 10
+    * `GET /api/v3/myTrades` weight increased to 10
+    * `GET /api/v3/exchangeInfo` weight increased to 10
 
 ---
 ## 2021-05-12

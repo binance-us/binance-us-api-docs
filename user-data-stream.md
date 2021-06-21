@@ -14,7 +14,7 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# User Data Streams for Binance (2020-07-09)
+# User Data Streams for Binance (2021-06-21)
 # General WSS information
 * The base API endpoint is: **https://api.binance.us**
 * A User Data Stream `listenKey` is valid for 60 minutes after creation.
@@ -87,55 +87,8 @@ listenKey | STRING | YES
 
 # Web Socket Payloads
 ## Account Update
-Account state is updated with the `outboundAccountInfo` event.
 
-**Payload:**
-```javascript
-{
-  "e": "outboundAccountInfo",   // Event type
-  "E": 1499405658849,           // Event time
-  "m": 0,                       // Maker commission rate (bips)
-  "t": 0,                       // Taker commission rate (bips)
-  "b": 0,                       // Buyer commission rate (bips)
-  "s": 0,                       // Seller commission rate (bips)
-  "T": true,                    // Can trade?
-  "W": true,                    // Can withdraw?
-  "D": true,                    // Can deposit?
-  "u": 1499405658848,           // Time of last account update
-  "B": [                        // Balances array
-    {
-      "a": "LTC",               // Asset
-      "f": "17366.18538083",    // Free amount
-      "l": "0.00000000"         // Locked amount
-    },
-    {
-      "a": "BTC",
-      "f": "10537.85314051",
-      "l": "2.19464093"
-    },
-    {
-      "a": "ETH",
-      "f": "17902.35190619",
-      "l": "0.00000000"
-    },
-    {
-      "a": "BNC",
-      "f": "1114503.29769312",
-      "l": "0.00000000"
-    },
-    {
-      "a": "NEO",
-      "f": "0.00000000",
-      "l": "0.00000000"
-    }
-  ],
-  "P": [
-    "SPOT"
-  ]  
-}
-```
-
-An additional event `outboundAccountPosition` is sent any time an account balance has changed and contains the assets that were possibly changed by the event that generated the balance change.
+The event `outboundAccountPosition` is sent any time an account balance has changed and contains the assets that were possibly changed by the event that generated the balance change.
 
 ```javascript
 {
