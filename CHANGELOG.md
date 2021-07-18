@@ -288,3 +288,4 @@
 * GET /api/v3/account weight changed to 20
 * GET /api/v3/myTrades weight changed to 20
 * GET /api/v3/historicalTrades weight changed to 20
+ 
