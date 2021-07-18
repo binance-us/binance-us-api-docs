@@ -12,7 +12,7 @@
     - [Retrieving Properties](#retrieving-properties)
 - [Detailed Stream information](#detailed-stream-information)
   - [Aggregate Trade Streams](#aggregate-trade-streams)
-  - [Trade Streams](#trade-streams)
+  - [Trade Streams](#trade-streams) 
   - [Kline/Candlestick Streams](#klinecandlestick-streams)
   - [Individual Symbol Mini Ticker Stream](#individual-symbol-mini-ticker-stream)
   - [All Market Mini Tickers Stream](#all-market-mini-tickers-stream)
