@@ -6,7 +6,7 @@ Errors consist of two parts: an error code and a message. Codes are universal,
   "code":-1121,
   "msg":"Invalid symbol."
 }
-```
+``` 
 
 
 ## 10xx - General Server or Network issues
