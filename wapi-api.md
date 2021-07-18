@@ -31,7 +31,7 @@ It is important to **NOT** treat this as a failure; the execution status is
 * Parameters may be sent in any order.
 * If a parameter sent in both the `query string` and `request body`, the
   `query string` parameter will be used.
-
+ 
 # LIMITS
 * The `/wapi/v3` `rateLimits` array contains objects related to the exchange's `REQUESTS` and `ORDER` rate limits.
 * A 429 will be returned when either rather limit is violated.
