@@ -10,7 +10,7 @@
 - [Web Socket Payloads](#web-socket-payloads)
   - [Account Update](#account-update)
   - [Order Update](#order-update)
-  - [Balance Update](#balance-update)
+  - [Balance Update](#balance-update) 
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
