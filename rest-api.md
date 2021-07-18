@@ -338,7 +338,7 @@ Status | Description
 `ALL_DONE`| An order list has completed execution and thus no longer active. 
 `REJECT` | The List Status is responding to a failed action either during order placement or order canceled
 
-**ContingencyType**
+**ContingencyType** 
 * OCO
 
 **Order types (orderTypes, type):**
