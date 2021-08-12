@@ -72,7 +72,7 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# Public Rest API for Binance (2021-06-21)
+# Public Rest API for Binance (2021-08-12)
 # General API Information
 * The base endpoint is: **https://api.binance.us**
 * All endpoints return either a JSON object or array.
@@ -1737,6 +1737,7 @@ Get trades for a specific account and symbol.
 Name | Type | Mandatory | Description
 ------------ | ------------ | ------------ | ------------
 symbol | STRING | YES |
+orderId|LONG|NO| This can only be used in combination with `symbol`.
 startTime | LONG | NO |
 endTime | LONG | NO |
 fromId | LONG | NO | TradeId to fetch from. Default gets most recent trades.

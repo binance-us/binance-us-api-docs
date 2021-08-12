@@ -1,4 +1,7 @@
-# CHANGELOG for Binance's API (2021-06-21)
+# CHANGELOG for Binance's API (2021-08-12)
+
+## 2021-08-12
+* GET `api/v3/myTrades` has a new optional field `orderId`
 
 ---
 ## 2021-06-21
