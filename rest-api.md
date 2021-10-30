@@ -664,7 +664,7 @@ Database
 ```
 GET /api/v3/aggTrades
 ```
-Get compressed, aggregate trades. Trades that fill at the time, from the same
+Get compressed, aggregate trades. Trades that fill at the same time, from the same
 order, with the same price will have the quantity aggregated.
 
 **Weight:**
