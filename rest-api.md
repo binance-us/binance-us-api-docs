@@ -483,9 +483,9 @@ There are 3 possible options:
 
 |Options|Example|
 |------|------|
-|No parameter|curl -X GET "https://api.binance.com/api/v3/exchangeInfo"|
-|symbol|curl -X GET "https://api.binance.com/api/v3/exchangeInfo?symbol=BNBBTC"|
-|symbols|curl -X GET "https://api.binance.com/api/v3/exchangeInfo?symbols=%5B%22BNBBTC%22,%22BTCUSDT%22%5D" or curl -g GET 'https://api.binance.com/api/v3/exchangeInfo?symbols=["BTCUSDT","BNBBTC"]'|
+|No parameter|curl -X GET "https://api.binance.us/api/v3/exchangeInfo"|
+|symbol|curl -X GET "https://api.binance.us/api/v3/exchangeInfo?symbol=BNBBTC"|
+|symbols|curl -X GET "https://api.binance.us/api/v3/exchangeInfo?symbols=%5B%22BNBBTC%22,%22BTCUSDT%22%5D" or curl -g GET 'https://api.binance.us/api/v3/exchangeInfo?symbols=["BTCUSDT","BNBBTC"]'|
 
 
 **Data Source:**
