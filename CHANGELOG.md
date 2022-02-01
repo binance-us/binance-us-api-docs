@@ -1,4 +1,12 @@
-# CHANGELOG for Binance's API (2021-08-12)
+# CHANGELOG for Binance's API (2022-02-01)
+
+## 2021-02-01
+* GET `api/v3/rateLimit/order` added
+    * The endpoint will display the user's current order count usage for all intervals.
+    * This endpoint will have a request weight of 20.
+* Removed out dated "Symbol Type" enum; added "Permissions" enum.
+
+---
 
 ## 2021-08-12
 * GET `api/v3/myTrades` has a new optional field `orderId`

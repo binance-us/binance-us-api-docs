@@ -19,7 +19,7 @@
     - [Example 2: As a query string](#example-2-as-a-query-string)
     - [Example 3: Mixed query string and request body](#example-3-mixed-query-string-and-request-body)
 - [Public API Endpoints](#public-api-endpoints)
-    - [Terminology](#terminology)
+  - [Terminology](#terminology)
   - [ENUM definitions](#enum-definitions)
   - [General endpoints](#general-endpoints)
     - [Test connectivity](#test-connectivity)
@@ -50,6 +50,7 @@
     - [Query Open OCO (USER_DATA)](#query-open-oco-user_data)
     - [Account information (USER_DATA)](#account-information-user_data)
     - [Account trade list (USER_DATA)](#account-trade-list-user_data)
+    - [Query Current Order Count Usage (TRADE)](#query-current-order-count-usage-trade)
   - [User data stream endpoints](#user-data-stream-endpoints)
     - [Start user data stream (USER_STREAM)](#start-user-data-stream-user_stream)
     - [Keepalive user data stream (USER_STREAM)](#keepalive-user-data-stream-user_stream)
@@ -72,7 +73,7 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# Public Rest API for Binance (2021-08-12)
+# Public Rest API for Binance (2022-02-01)
 # General API Information
 * The base endpoint is: **https://api.binance.us**
 * All endpoints return either a JSON object or array.
@@ -306,7 +307,7 @@ These terms will be used throughout the documentation, so it is recommended espe
 * AUCTION_MATCH
 * BREAK
 
-**Symbol type:**
+**Account and Symbol Permissions (permissions)**
 
 * SPOT
 
@@ -1777,6 +1778,49 @@ Database
   }
 ]
 ```
+
+### Query Current Order Count Usage (TRADE)
+
+```
+GET /api/v3/rateLimit/order
+```
+
+Display's the user's current order count usage for all intervals.
+
+**Weight:**
+20
+
+**Parameters:**
+
+Name | Type | Mandatory | Description
+------------ | ------------ | ------------ | ------------
+recvWindow | LONG | NO | The value cannot be greater than `60000`
+timestamp | LONG | YES |
+
+**Data Source:**
+Memory
+
+**Response:**
+
+```json
+[
+  {
+    "rateLimitType": "ORDERS",
+    "interval": "SECOND",
+    "intervalNum": 10,
+    "limit": 100,
+    "count": 0
+  },
+  {
+    "rateLimitType": "ORDERS",
+    "interval": "DAY",
+    "intervalNum": 1,
+    "limit": 200000,
+    "count": 0
+  }
+]
+```
+
 ## User data stream endpoints
 Specifics on how user data streams work can be found [here](https://github.com/binance-us/binance-official-api-docs/blob/master/user-data-stream.md)
 
@@ -2027,7 +2071,7 @@ An account's position defined as the sum of the account's:
 
 ## Exchange Filters
 ### EXCHANGE_MAX_NUM_ORDERS
-The `MAX_NUM_ORDERS` filter defines the maximum number of orders an account is allowed to have open on the exchange.
+The `EXCHANGE_MAX_NUM_ORDERS` filter defines the maximum number of orders an account is allowed to have open on the exchange.
 Note that both "algo" orders and normal orders are counted for this filter.
 
 **/exchangeInfo format:**
@@ -2039,13 +2083,13 @@ Note that both "algo" orders and normal orders are counted for this filter.
 ```
 
 ### EXCHANGE_MAX_NUM_ALGO_ORDERS
-The `MAX_ALGO_ORDERS` filter defines the maximum number of "algo" orders an account is allowed to have open on the exchange.
+The `EXCHANGE_MAX_NUM_ALGO_ORDERS` filter defines the maximum number of "algo" orders an account is allowed to have open on the exchange.
 "Algo" orders are `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`, and `TAKE_PROFIT_LIMIT` orders.
 
 **/exchangeInfo format:**
 ```javascript
 {
-  "filterType": "EXCHANGE_MAX_ALGO_ORDERS",
+  "filterType": "EXCHANGE_MAX_NUM_ALGO_ORDERS",
   "maxNumAlgoOrders": 200
 }
 ```
