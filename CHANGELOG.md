@@ -233,7 +233,7 @@
 * `intervalNum` added to /api/v1/exchangeInfo limits. `intervalNum` describes the amount of the interval. For example: `intervalNum` 5, with `interval` minute, means "every 5 minutes".
   
 #### Explanation for the average price calculation:
-1. (qty * price) of all trades / numTrades of the trades over previous 5 minutes.
+1. (qty * price) of all trades / sum of qty of all of the trades over previous 5 minutes.
 
 2. If there is no trade in the last 5 minutes, it takes the first trade that happened outside of the 5min window.
    For example if the last trade was 20 minutes ago, that trade's price is the 5 min average.
