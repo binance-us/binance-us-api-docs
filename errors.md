@@ -183,8 +183,8 @@ Error message | Description
 "Filter failure: ICEBERG_PARTS" | `ICEBERG` order would break into too many parts; icebergQty is too small.
 "Filter failure: MARKET_LOT_SIZE" | `MARKET` order's `quantity` is too high, too low, and/or not following the step size rule for the symbol.
 "Filter failure: MAX_NUM_ORDERS" | Account has too many open orders on the symbol.
-"Filter failure: MAX_ALGO_ORDERS" | Account has too many open stop loss and/or take profit orders on the symbol.
+"Filter failure: MAX_NUM_ALGO_ORDERS" | Account has too many open stop loss and/or take profit orders on the symbol.
 "Filter failure: MAX_NUM_ICEBERG_ORDERS" | Account has too many open iceberg orders on the symbol.
 "Filter failure: EXCHANGE_MAX_NUM_ORDERS" | Account has too many open orders on the exchange.
-"Filter failure: EXCHANGE_MAX_ALGO_ORDERS" | Account has too many open stop loss and/or take profit orders on the exchange.
+"Filter failure: EXCHANGE_MAX_NUM_ALGO_ORDERS" | Account has too many open stop loss and/or take profit orders on the exchange.
 
