@@ -466,4 +466,3 @@ Order book price and quantity depth updates used to locally manage an order book
 7. The data in each event is the **absolute** quantity for a price level
 8. If the quantity is 0, **remove** the price level
 9. Receiving an event that removes a price level that is not in your local order book can happen and is normal.
-
