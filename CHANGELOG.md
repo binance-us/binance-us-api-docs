@@ -1,6 +1,51 @@
-# CHANGELOG for Binance's API (2022-02-01)
+# CHANGELOG for Binance's API (2022-02-25)
 
-## 2021-02-01
+## 2022-02-25
+
+**REST API**
+
+* `(price-minPrice) % tickSize == 0` rule in `PRICE_FILTER` has been changed to `price % tickSize == 0`.
+* A new filter `PERCENT_PRICE_BY_SIDE` has been added.
+* Changes to GET `api/v3/depth`
+    * The `limit` value can be outside of the previous values (i.e. 5, 10, 20, 50, 100, 500, 1000,5000) and will return the correct limit. (i.e. if limit=3 then the response will be the top 3 bids and asks)
+    * The limit still cannot exceed 5000. If the limit provided is greater than 5000, then the response will be truncated to 5000.
+    * Due to the changes, these are the updated request weights based on the limit value provided:
+
+|Limit|Request Weight
+------|-------
+1-100|  1
+101-500| 5
+501-1000| 10
+1001-5000| 50
+
+* Changes to GET `api/v3/aggTrades`
+    * When providing `startTime` and `endTime`, the oldest items are returned.
+
+* Changed error messaging on `GET /api/v3/myTrades` where parameter `symbol` is not provided:
+```json
+{
+"code": -1102,
+"msg": "Mandatory parameter 'symbol' was not sent, was empty/null, or malformed." 
+}
+
+```
+*  The following endpoints now support multi-symbol querying using the parameter `symbols`.
+    * `GET /api/v3/ticker/24hr`
+    * `GET /api/v3/ticker/price`
+    * `GET /api/v3/ticker/bookTicker`
+* In the above, the request weight will depend on the number of symbols provided in `symbols`. <br> Please refer to the table below:
+
+|Endpoint|Number of Symbols|Weight|
+|-----|-----|----|
+| `GET /api/v3/ticker/price`|Any| 2|
+|`GET /api/v3/ticker/bookTicker`|Any|2|
+|`GET /api/v3/ticker/24hr`|1-20|1|
+|`GET /api/v3/ticker/24hr`|21-100|20|
+|`GET /api/v3/ticker/24hr`|101 or more|40|
+
+---
+
+## 2022-02-01
 * GET `api/v3/rateLimit/order` added
     * The endpoint will display the user's current order count usage for all intervals.
     * This endpoint will have a request weight of 20.

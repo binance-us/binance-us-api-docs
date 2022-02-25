@@ -73,7 +73,7 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# Public Rest API for Binance (2022-02-01)
+# Public Rest API for Binance (2022-02-25)
 # General API Information
 * The base endpoint is: **https://api.binance.us**
 * All endpoints return either a JSON object or array.
@@ -555,21 +555,19 @@ GET /api/v3/depth
 **Weight:**
 Adjusted based on the limit:
 
-
-Limit | Weight
------------- | ------------
-5, 10, 20, 50, 100 | 1
-500 | 5
-1000 | 10
-5000| 50
-
+|Limit|Request Weight
+------|-------
+1-100|  1
+101-500| 5
+501-1000| 10
+1001-5000| 50
 
 **Parameters:**
 
 Name | Type | Mandatory | Description
 ------------ | ------------ | ------------ | ------------
 symbol | STRING | YES |
-limit | INT | NO | Default 100; max 5000. Valid limits:[5, 10, 20, 50, 100, 500, 1000, 5000]
+limit | INT | NO | Default 100; max 5000. <br> If limit > 5000. then the response will truncate to 5000. 
 
 **Data Source:**
 Memory
@@ -785,15 +783,72 @@ GET /api/v3/ticker/24hr
 24 hour rolling window price change statistics. **Careful** when accessing this with no symbol.
 
 **Weight:**
-1 for a single symbol; **40** when the symbol parameter is omitted
+
+<table>
+<thead>
+    <tr>
+        <th>Parameter</th>
+        <th>Symbols Provided</th>
+        <th>Weight</th>
+    </tr>
+</thead>
+<tbody>
+    <tr>
+        <td rowspan=2>symbol</td>
+        <td>1</td>
+        <td>1</td>
+    </tr>
+    <tr>
+        <td>symbol parameter is omitted</td>
+        <td>40</td>
+    </tr>
+    <tr>
+        <td rowspan=4>symbols</td>
+        <td>1-20</td>
+        <td>1</td>
+    </tr>
+    <tr>
+        <td>21-100</td>
+        <td>20</td>
+    </tr>
+    <tr>
+        <td>101 or more</td>
+        <td>40</td>
+    </tr>
+    <tr>
+        <td>symbols parameter is omitted</td>
+        <td>40</td>
+    </tr>
+</tbody>
+</table>
 
 **Parameters:**
 
-Name | Type | Mandatory | Description
------------- | ------------ | ------------ | ------------
-symbol | STRING | NO |
+<table>
+<thead>
+    <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Mandatory</th>
+        <th>Description</th>
+    </tr>
+</thead>
+<tbody>
+    <tr>
+        <td>symbol</td>
+        <td>STRING</td>
+        <td>NO</td>
+        <td rowspan=2> Parameter symbol and symbols cannot be used in combination. <br> If neither parameter is sent, tickers for all symbols will be returned in an array <br> <br> Symbols accepts the following formats: ["BTCUSDT","LTCUSDT"] <br> or <br> %5B%22BTCUSDT%22,%22LTCUSDT%22%5D</td>
+     </tr>
+     <tr>
+        <td>symbols</td>
+        <td>STRING</td>
+        <td>NO</td>
+     </tr>
+</tbody>
+</table>
 
-* If the symbol is not sent, tickers for all symbols will be returned in an array.
+
 
 **Data Source:**
 Memory
@@ -857,14 +912,59 @@ GET /api/v3/ticker/price
 Latest price for a symbol or symbols.
 
 **Weight:**
-1 for a single symbol; **2** when the symbol parameter is omitted
+
+<table>
+<thead>
+    <tr>
+        <th>Parameter</th>
+        <th>Symbols Provided</th>
+        <th>Weight</th>
+    </tr>
+</thead>
+<tbody>
+    <tr>
+        <td rowspan=2>symbol</td>
+        <td>1</td>
+        <td>1</td>
+    </tr>
+    <tr>
+        <td>symbol parameter is omitted</td>
+        <td>2</td>
+    </tr>
+    <tr>
+        <td>symbols</td>
+        <td>Any</td>
+        <td>2</td>
+    </tr>
+</tbody>
+</table>
+
 
 **Parameters:**
 
-Name | Type | Mandatory | Description
------------- | ------------ | ------------ | ------------
-symbol | STRING | NO |
-
+<table>
+<thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Mandatory</th>
+      <th>Description</th>
+    </tr>
+</thead>
+<tbody>
+    <tr>
+        <td>symbol</td>
+        <td>STRING</td>
+        <td>NO</td>
+               <td rowspan=2> Parameter symbol and symbols cannot be used in combination. <br> If neither parameter is sent, prices for all symbols will be returned in an array <br> <br> Symbols accepts the following formats: ["BTCUSDT","LTCUSDT"] <br> or <br> %5B%22BTCUSDT%22,%22LTCUSDT%22%5D</td>
+    </tr>
+    <tr>
+        <td>symbols</td>
+        <td>STRING</td>
+        <td>NO</td>
+    </tr>
+</tbody>
+</table>
 * If the symbol is not sent, prices for all symbols will be returned in an array.
 
 **Data Source:**
@@ -898,15 +998,60 @@ GET /api/v3/ticker/bookTicker
 Best price/qty on the order book for a symbol or symbols.
 
 **Weight:**
-1 for a single symbol; **2** when the symbol parameter is omitted
+
+<table>
+<thead>
+    <tr>
+        <th>Parameter</th>
+        <th>Symbols Provided</th>
+        <th>Weight</th>
+    </tr>
+</thead>
+<tbody>
+    <tr>
+        <td rowspan=2>symbol</td>
+        <td>1</td>
+        <td>1</td>
+    </tr>
+    <tr>
+        <td>symbol parameter is omitted</td>
+        <td>2</td>
+    </tr>
+    <tr>
+        <td>symbols</td>
+        <td>Any</td>
+        <td>2</td>
+    </tr>
+</tbody>
+</table>
+
+
 
 **Parameters:**
 
-Name | Type | Mandatory | Description
------------- | ------------ | ------------ | ------------
-symbol | STRING | NO |
-
-* If the symbol is not sent, bookTickers for all symbols will be returned in an array.
+<table>
+<thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Mandatory</th>
+      <th>Description</th>
+    </tr>
+</thead>
+<tbody>
+    <tr>
+        <td>symbol</td>
+        <td>STRING</td>
+        <td>NO</td>
+        <td rowspan=2> Parameter symbol and symbols cannot be used in combination. <br> If neither parameter is sent, bookTickers for all symbols will be returned in an array <br> <br> Symbols accepts the following formats: ["BTCUSDT","LTCUSDT"] <br> or <br> %5B%22BTCUSDT%22,%22LTCUSDT%22%5D</td>
+    </tr>
+    <tr>
+        <td>symbols</td>
+        <td>STRING</td>
+        <td>NO</td>
+    </tr>
+</tbody>
+</table>
 
 **Data Source:**
 Memory
@@ -1938,6 +2083,30 @@ In order to pass the `percent price`, the following must be true for `price`:
   "multiplierDown": "0.7000",
   "avgPriceMins": 5
 }
+```
+
+### PERCENT_PRICE_BY_SIDE
+The `PERCENT_PRICE_BY_SIDE` filter defines the valid range for the price based on the last price of the symbol. <br>
+There is a different range depending on whether the order is placed on the `BUY` side or the `SELL` side.
+
+Buy orders will succeed on this filter if:
+* `Order price` <= `bidMultiplierUp` * `lastPrice`
+* `Order price` >= `bidMultiplierDown` * `lastPrice`
+
+Sell orders will succeed on this filter if:
+* `Order Price` <= `askMultiplierUp` * `lastPrice`
+* `Order Price` >= `askMultiplierDown` * `lastPrice`
+
+**/exchangeInfo format:**
+```javascript
+    {
+          "filterType": "PERCENT_PRICE_BY_SIDE",
+          "bidMultiplierUp": "1.2",
+          "bidMultiplierDown": "0.2",
+          "askMultiplierUp": "5",
+          "askMultiplierDown": "0.8",
+          "avgPriceMins": 1
+    }
 ```
 
 ### LOT_SIZE
