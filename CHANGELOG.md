@@ -1,8 +1,27 @@
-# CHANGELOG for Binance's API (2022-02-28)
+# CHANGELOG for Binance's API (2022-03-31)
+
+## 2022-03-31
+
+REST API
+
+* Changes to `GET api/v3/allOrders` where symbol is not provided:
+    ```json
+    {
+     "code": -1102,
+     "msg": "Mandatory parameter 'symbol' was not sent, was empty/null, or malformed."
+    }
+    ```
+* Fixed a typo with an error message when an account has disabled permissions (e.g. to withdraw, to trade, etc)
+    ```json
+    "This action is disabled on this account." 
+
+---
 
 ## 2022-02-28
 
 * New field `allowTrailingStop` has been added to GET /api/v3/exchangeInfo
+
+---
 
 ## 2022-02-25
 
