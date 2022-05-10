@@ -1321,7 +1321,7 @@ newClientOrderId | STRING | NO |  Used to uniquely identify this cancel. Automat
 recvWindow | LONG | NO | The value cannot be greater than ```60000```
 timestamp | LONG | YES |
 
-Either `orderId` or `origClientOrderId` must be sent.
+Either `orderId` or `origClientOrderId` must be sent. If both are provided, `orderId` takes precedence.
 
 **Data Source:**
 Matching Engine
@@ -1596,6 +1596,7 @@ timestamp|LONG|YES|
 
 Additional notes:
 * Canceling an individual leg will cancel the entire OCO
+* If both `orderListId` and `listClientOrderId` are provided, `orderListId` takes precedence.
 
 **Data Source:**
 Matching Engine
