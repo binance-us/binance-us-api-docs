@@ -59,6 +59,7 @@
   - [Symbol filters](#symbol-filters)
     - [PRICE_FILTER](#price_filter)
     - [PERCENT_PRICE](#percent_price)
+    - [PERCENT_PRICE_BY_SIDE](#percent_price_by_side)
     - [LOT_SIZE](#lot_size)
     - [MIN_NOTIONAL](#min_notional)
     - [ICEBERG_PARTS](#iceberg_parts)
@@ -67,6 +68,7 @@
     - [MAX_NUM_ALGO_ORDERS](#max_num_algo_orders)
     - [MAX_NUM_ICEBERG_ORDERS](#max_num_iceberg_orders)
     - [MAX_POSITION](#max_position)
+    - [TRAILING_DELTA](#trailing_delta)
   - [Exchange Filters](#exchange-filters)
     - [EXCHANGE_MAX_NUM_ORDERS](#exchange_max_num_orders)
     - [EXCHANGE_MAX_NUM_ALGO_ORDERS](#exchange_max_num_algo_orders)
@@ -800,7 +802,7 @@ GET /api/v3/ticker/24hr
         <td>1</td>
     </tr>
     <tr>
-        <td>symbol parameter is omitted</td>
+        <td><tt>symbol</tt> parameter is omitted</td>
         <td>40</td>
     </tr>
     <tr>
@@ -817,7 +819,7 @@ GET /api/v3/ticker/24hr
         <td>40</td>
     </tr>
     <tr>
-        <td>symbols parameter is omitted</td>
+        <td><tt>symbols</tt> parameter is omitted</td>
         <td>40</td>
     </tr>
 </tbody>
@@ -839,7 +841,7 @@ GET /api/v3/ticker/24hr
         <td>symbol</td>
         <td>STRING</td>
         <td>NO</td>
-        <td rowspan=2> Parameter symbol and symbols cannot be used in combination. <br> If neither parameter is sent, tickers for all symbols will be returned in an array <br> <br> Symbols accepts the following formats: ["BTCUSDT","LTCUSDT"] <br> or <br> %5B%22BTCUSDT%22,%22LTCUSDT%22%5D</td>
+        <td rowspan=2> Parameter <tt>symbol</tt> and <tt>symbols</tt> cannot be used in combination. <br> If neither parameter is sent, tickers for all <tt>symbols</tt> will be returned in an array <br> <br> Symbols accepts the following formats: ["BTCUSDT","LTCUSDT"] <br> or <br> %5B%22BTCUSDT%22,%22LTCUSDT%22%5D</td>
      </tr>
      <tr>
         <td>symbols</td>
@@ -865,7 +867,9 @@ Memory
   "lastPrice": "4.00000200",
   "lastQty": "200.00000000",
   "bidPrice": "4.00000000",
+  "bidQty": "100.00000000",
   "askPrice": "4.00000200",
+  "askQty": "100.00000000",
   "openPrice": "99.00000000",
   "highPrice": "100.00000000",
   "lowPrice": "0.10000000",
@@ -890,7 +894,9 @@ OR
     "lastPrice": "4.00000200",
     "lastQty": "200.00000000",
     "bidPrice": "4.00000000",
+    "bidQty": "100.00000000",
     "askPrice": "4.00000200",
+    "askQty": "100.00000000",
     "openPrice": "99.00000000",
     "highPrice": "100.00000000",
     "lowPrice": "0.10000000",
@@ -929,7 +935,7 @@ Latest price for a symbol or symbols.
         <td>1</td>
     </tr>
     <tr>
-        <td>symbol parameter is omitted</td>
+        <td><tt>symbol</tt> parameter is omitted</td>
         <td>2</td>
     </tr>
     <tr>
@@ -957,7 +963,7 @@ Latest price for a symbol or symbols.
         <td>symbol</td>
         <td>STRING</td>
         <td>NO</td>
-               <td rowspan=2> Parameter symbol and symbols cannot be used in combination. <br> If neither parameter is sent, prices for all symbols will be returned in an array <br> <br> Symbols accepts the following formats: ["BTCUSDT","LTCUSDT"] <br> or <br> %5B%22BTCUSDT%22,%22LTCUSDT%22%5D</td>
+               <td rowspan=2> Parameter <tt>symbol</tt> and <tt>symbols</tt> cannot be used in combination. <br> If neither parameter is sent, prices for all symbols will be returned in an array <br> <br> Symbols accepts the following formats: ["BTCUSDT","LTCUSDT"] <br> or <br> %5B%22BTCUSDT%22,%22LTCUSDT%22%5D</td>
     </tr>
     <tr>
         <td>symbols</td>
@@ -1015,7 +1021,7 @@ Best price/qty on the order book for a symbol or symbols.
         <td>1</td>
     </tr>
     <tr>
-        <td>symbol parameter is omitted</td>
+        <td><tt>symbol</tt> parameter is omitted</td>
         <td>2</td>
     </tr>
     <tr>
@@ -1044,7 +1050,7 @@ Best price/qty on the order book for a symbol or symbols.
         <td>symbol</td>
         <td>STRING</td>
         <td>NO</td>
-        <td rowspan=2> Parameter symbol and symbols cannot be used in combination. <br> If neither parameter is sent, bookTickers for all symbols will be returned in an array <br> <br> Symbols accepts the following formats: ["BTCUSDT","LTCUSDT"] <br> or <br> %5B%22BTCUSDT%22,%22LTCUSDT%22%5D</td>
+        <td rowspan=2> Parameter <tt>symbol</tt> and <tt>symbols</tt> cannot be used in combination. <br> If neither parameter is sent, bookTickers for all symbols will be returned in an array <br> <br> Symbols accepts the following formats: ["BTCUSDT","LTCUSDT"] <br> or <br> %5B%22BTCUSDT%22,%22LTCUSDT%22%5D</td>
     </tr>
     <tr>
         <td>symbols</td>
@@ -2241,6 +2247,34 @@ An account's position defined as the sum of the account's:
 }
 ```
 
+### TRAILING_DELTA
+
+The `TRAILING_DELTA` filter defines the minimum and maximum value for the parameter `trailingDelta`.
+
+In order for a trailing stop order to pass this filter, the following must be true:
+
+For `STOP_LOSS BUY`, `STOP_LOSS_LIMIT_BUY`,`TAKE_PROFIT SELL` and `TAKE_PROFIT_LIMIT SELL` orders: 
+
+* `trailingDelta` >= `minTrailingAboveDelta`
+* `trailingDelta` <= `maxTrailingAboveDelta` 
+
+For `STOP_LOSS SELL`, `STOP_LOSS_LIMIT SELL`, `TAKE_PROFIT BUY`, and `TAKE_PROFIT_LIMIT BUY` orders:
+
+* `trailingDelta` >= `minTrailingBelowDelta`
+* `trailingDelta` <= `maxTrailingBelowDelta`
+
+
+**/exchangeInfo format:**
+
+```javascript
+    {
+          "filterType": "TRAILING_DELTA",
+          "minTrailingAboveDelta": 10,
+          "maxTrailingAboveDelta": 2000,
+          "minTrailingBelowDelta": 10,
+          "maxTrailingBelowDelta": 2000
+   }
+```
 
 ## Exchange Filters
 ### EXCHANGE_MAX_NUM_ORDERS
