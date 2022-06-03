@@ -348,8 +348,6 @@ Status | Description
 
 **Order types (orderTypes, type):**
 
-More information on how the order types definitions can be found here: [Types of Orders](https://www.binance.com/en/support/articles/360033779452-Types-of-Order)
-
 * LIMIT
 * MARKET
 * STOP_LOSS
@@ -1818,7 +1816,7 @@ Database
     "listOrderStatus": "EXECUTING",
     "listClientOrderId": "wuB13fmulKj3YjdqWEcsnp",
     "transactionTime": 1565246080644,
-    "symbol": "1565246079109",
+    "symbol": "LTCBTC",
     "orders": [
       {
         "symbol": "LTCBTC",
@@ -1907,8 +1905,8 @@ recvWindow | LONG | NO | The value cannot be greater than ```60000```
 timestamp | LONG | YES |
 
 **Notes:**
-* If `fromId` is set, it will get orders >= that `fromId`.
-Otherwise most recent orders are returned.
+* If `fromId` is set, it will get trades >= that `fromId`.
+Otherwise most recent trades are returned.
 
 **Data Source:**
 Database
@@ -2200,7 +2198,7 @@ Note that both "algo" orders and normal orders are counted for this filter.
 ```javascript
 {
   "filterType": "MAX_NUM_ORDERS",
-  "limit": 25
+  "maxNumOrders": 25
 }
 ```
 
