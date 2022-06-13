@@ -1,4 +1,4 @@
-# Error codes for Binance (2022-03-31)
+# Error codes for Binance (2022-06-13)
 Errors consist of two parts: an error code and a message. Codes are universal,
  but messages can vary. Here is the error JSON payload:
 ```javascript
@@ -171,7 +171,19 @@ Error message | Description
 "Order would immediately match and take." | `LIMIT_MAKER` order type would immediately match and trade, and not be a pure maker order.
 "The relationship of the prices for the orders is not correct." | The prices set in the `OCO` is breaking the Price rules. <br> The rules are: <br> `SELL Orders`: Limit Price > Last Price > Stop Price <br>`BUY Orders`: Limit Price < Last Price < Stop Price
 "OCO orders are not supported for this symbol" | `OCO` is not enabled on the symbol
-"Quote order qty market orders are not support for this symbol." | `MARKET` orders using the parameter `quoteOrderQty` are not enabled on this symbol.
+"Quote order qty market orders are not support for this symbol."| `MARKET` orders using the parameter `quoteOrderQty` are not enabled on the symbol.
+"Trailing stop orders are not supported for this symbol."   | Orders using `trailingDelta` are not enabled on the symbol.
+"Order cancel-replace is not supported for this symbol."  | `POST /api/v3/order/cancelReplace` is not enabled for the symbol.
+
+## Errors regarding POST /api/v3/order/cancelReplace
+
+### -2021 Order cancel-replace partially failed
+
+This code is sent when either the cancellation of the order failed or the new order placement failed but not both.
+
+### -2022 Order cancel-replace failed.
+
+This code is sent when both the cancellation of the order failed and the new order placement failed.
 
 ## -9xxx Filter failures
 Error message | Description
