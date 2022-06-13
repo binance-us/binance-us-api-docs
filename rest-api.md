@@ -75,7 +75,7 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# Public Rest API for Binance (2022-02-25)
+# Public Rest API for Binance (2022-06-13)
 # General API Information
 * The base endpoint is: **https://api.binance.us**
 * All endpoints return either a JSON object or array.
@@ -533,6 +533,7 @@ Memory
       "ocoAllowed": true,
       "quoteOrderQtyMarketAllowed": true,
       "allowTrailingStop": false
+      "cancelReplaceAllowed": true,
       "isSpotTradingAllowed": true,
       "isMarginTradingAllowed": false,
       "filters": [
@@ -1091,6 +1092,79 @@ OR
 ]
 ```
 
+### Rolling window price change statistics
+```
+GET /api/v3/ticker
+```
+
+**Note:** This endpoint is different from the `GET /api/v3/ticker/24hr` endpoint.
+
+The window used to compute statistics is typically slightly wider than requested `windowSize`.
+
+`openTime` for `/api/v3/ticker` always starts on a minute, while the `closeTime` is the current time of the request.
+As such, the effective window might be up to 1 minute wider than requested.
+
+E.g. If the `closeTime` is 1641287867099 (January 04, 2022 09:17:47:099 UTC) , and the `windowSize` is `1d`. the `openTime` will be: 1641201420000 (January 3, 2022, 09:17:00)
+
+**Weight:**
+
+5 for each requested <tt>symbol</tt> regardless of <tt>windowSize</tt>
+
+**Parameters**
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Type</th>
+    <th>Mandatory</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td>symbol</td>
+    <td rowspan=2>STRING</td>
+    <td rowspan=2>YES</td>
+    <td rowspan=2>Either <tt>symbol</tt> or <tt>symbols</tt> must be provided <br> Examples of accepted format for the <tt>symbols</tt> parameter: <br> ["BTCUSDT","BNBUSDT"] <br>or <br>%5B%22BTCUSDT%22,%22BNBUSDT%22%5D
+    </td>
+  </tr>
+  <tr>
+     <td>symbols</td>
+  </tr>
+  <tr>
+     <td>windowSize</td>
+     <td>ENUM</td>
+     <td>NO</td>
+     <td>Defaults to <tt>1d</tt> if no parameter provided <br> Supported <tt>windowSize</tt> values: <br> <tt>1m</tt>,<tt>2m</tt>....<tt>59m</tt> for minutes <br> <tt>1h</tt>, <tt>2h</tt>....<tt>23h</tt> - for hours <br> <tt>1d</tt>...<tt>7d</tt> - for days <br><br> Units cannot be combined (e.g. <tt>1d2h</tt> is not allowed)</td>
+  </tr>
+  <tr>
+  </tr>
+</table>
+
+**Data Source:**
+Database
+
+**Response**
+
+```javascript
+{
+  "symbol":             "BNBBTC",
+  "priceChange":        "-8.00000000",  // Absolute price change
+  "priceChangePercent": "-88.889",      // Relative price change in percent
+  "weightedAvgPrice":   "2.60427807",   // QuoteVolume / Volume
+  "openPrice":          "9.00000000",
+  "highPrice":          "9.00000000",
+  "lowPrice":           "1.00000000",
+  "lastPrice":          "1.00000000",
+  "volume":             "187.00000000",
+  "quoteVolume":        "487.00000000", // Sum of (price * volume) for all trades
+  "openTime":           1641859200000,  // Open time for ticker window
+  "closeTime":          1642031999999,  // Close time for ticker window
+  "firstId":            0,              // Trade IDs
+  "lastId":             60,
+  "count":              61              // Number of trades in the interval
+}
+
+```
+
 ## Account endpoints
 ### New order  (TRADE)
 ```
@@ -1368,6 +1442,185 @@ timestamp|LONG|YES|
 
 **Data Source:**
 Matching Engine
+
+
+### Cancel an Existing Order and Send a New Order (TRADE)
+
+```
+POST /api/v3/order/cancelReplace
+```
+Cancels an existing order and places a new order on the same symbol.
+
+Filters are evaluated before the cancel order is placed.
+
+If the new order placement is successfully sent to the engine, the order count will increase by 1.
+
+**Weight:**
+1
+
+**Parameters:**
+
+Name | Type | Mandatory | Description
+------------ | ------------ | ------------ | ------------
+symbol | STRING | YES |
+side   |ENUM| YES|
+type   |ENUM| YES|
+cancelReplaceMode|ENUM|YES| The allowed values are: <br> `STOP_ON_FAILURE` - If the cancel request fails, the new order placement will not be attempted. <br> `ALLOW_FAILURES` - new order placement will be attempted even if cancel request fails.
+timeInForce|ENUM|NO|
+quantity|DECIMAL|NO|
+quoteOrderQty |DECIMAL|NO
+price |DECIMAL|NO
+cancelNewClientOrderId|STRING|NO
+cancelOrigClientOrderId|STRING| NO| Either the `cancelOrigClientOrderId` or `cancelOrderId` must be provided. If both are provided, `cancelOrderId` takes precedence.
+cancelOrderId|LONG|NO| Either the `cancelOrigClientOrderId` or `cancelOrderId` must be provided. If both are provided, `cancelOrderId` takes precedence.
+newClientOrderId |STRING|NO| Used to identify the new order.
+stopPrice|DECIMAL|NO|
+trailingDelta|LONG|NO|
+icebergQty|DECIMAL|NO|
+newOrderRespType|ENUM|NO|Allowed values: <br> `ACK`, `RESULT`, `FULL` <br> `MARKET` and `LIMIT` orders types default to `FULL`; all other orders default to `ACK`
+recvWindow | LONG | NO | The value cannot be greater than `60000`
+timestamp | LONG | YES |
+
+Similar to `POST /api/v3/order`, additional mandatory parameters are determined by `type`.
+
+Response format varies depending on whether the processing of the message succeeded, partially succeeded, or failed. 
+
+**Data Source:**
+Matching Engine
+
+**Response SUCCESS:**
+
+```javascript
+//Both the cancel order placement and new order placement succeeded.
+{
+  "cancelResult": "SUCCESS",
+  "newOrderResult": "SUCCESS",
+  "cancelResponse": {
+    "symbol": "BTCUSDT",
+    "origClientOrderId": "DnLo3vTAQcjha43lAZhZ0y",
+    "orderId": 9,
+    "orderListId": -1,
+    "clientOrderId": "osxN3JXAtJvKvCqGeMWMVR",
+    "price": "0.01000000",
+    "origQty": "0.000100",
+    "executedQty": "0.00000000",
+    "cummulativeQuoteQty": "0.00000000",
+    "status": "CANCELED",
+    "timeInForce": "GTC",
+    "type": "LIMIT",
+    "side": "SELL"
+  },
+  "newOrderResponse": {
+    "symbol": "BTCUSDT",
+    "orderId": 10,
+    "orderListId": -1,
+    "clientOrderId": "wOceeeOzNORyLiQfw7jd8S",
+    "transactTime": 1652928801803,
+    "price": "0.02000000",
+    "origQty": "0.040000",
+    "executedQty": "0.00000000",
+    "cummulativeQuoteQty": "0.00000000",
+    "status": "NEW",
+    "timeInForce": "GTC",
+    "type": "LIMIT",
+    "side": "BUY",
+    "fills": []
+  }
+}
+```
+
+**Response when Cancel Order Fails with STOP_ON FAILURE:**
+```javascript
+{
+  "code": -2022,
+  "msg": "Order cancel-replace failed.",
+  "data": {
+    "cancelResult": "FAILURE",
+    "newOrderResult": "NOT_ATTEMPTED",
+    "cancelResponse": {
+      "code": -2011,
+      "msg": "Unknown order sent."
+    },
+    "newOrderResponse": null
+  }
+}
+```
+
+**Response when Cancel Order Succeeds but New Order Placement Fails:**
+```javascript
+{
+  "code": -2021,
+  "msg": "Order cancel-replace partially failed.",
+  "data": {
+    "cancelResult": "SUCCESS",
+    "newOrderResult": "FAILURE",
+    "cancelResponse": {
+      "symbol": "BTCUSDT",
+      "origClientOrderId": "86M8erehfExV8z2RC8Zo8k",
+      "orderId": 3,
+      "orderListId": -1,
+      "clientOrderId": "G1kLo6aDv2KGNTFcjfTSFq",
+      "price": "0.006123",
+      "origQty": "10000.000000",
+      "executedQty": "0.000000",
+      "cummulativeQuoteQty": "0.000000",
+      "status": "CANCELED",
+      "timeInForce": "GTC",
+      "type": "LIMIT_MAKER",
+      "side": "SELL"
+    },
+    "newOrderResponse": {
+      "code": -2010,
+      "msg": "Order would immediately match and take."
+    }
+  }
+}
+```
+
+**Response when Cancel Order fails with ALLOW_FAILURE:**
+
+```javascript
+{
+  "code": -2021,
+  "msg": "Order cancel-replace partially failed.",
+  "data": {
+    "cancelResult": "FAILURE",
+    "newOrderResult": "SUCCESS",
+    "cancelResponse": {
+      "code": -2011,
+      "msg": "Unknown order sent."
+    },
+    "newOrderResponse": {
+      "symbol": "BTCUSDT",
+      "orderId": 11,
+      "orderListId": -1,
+      "clientOrderId": "pfojJMg6IMNDKuJqDxvoxN",
+      "transactTime": 1648540168818
+    }
+  }
+}
+```
+
+**Response when both Cancel Order and New Order Placement fail:**
+
+```javascript
+{
+  "code": -2022,
+  "msg": "Order cancel-replace failed.",
+  "data": {
+    "cancelResult": "FAILURE",
+    "newOrderResult": "FAILURE",
+    "cancelResponse": {
+      "code": -2011,
+      "msg": "Unknown order sent."
+    },
+    "newOrderResponse": {
+      "code": -2010,
+      "msg": "Order would immediately match and take."
+    }
+  }
+}
+```
 
 
 ### Current open orders (USER_DATA)

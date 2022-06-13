@@ -1,4 +1,32 @@
-# CHANGELOG for Binance's API (2022-03-31)
+# CHANGELOG for Binance's API (2022-06-13)
+
+## 2022-06-13
+
+SPOT API
+
+* `GET /api/v3/ticker` added
+    * Rolling window price change statistics based on `windowSize` provided.
+    * Contrary to `GET /api/v3/ticker/24hr` the list of symbols cannot be omitted.
+    * If `windowSize` not specified, the default value will default to `1d`.
+    * Response is similar to `GET /api/v3/ticker/24hr`, minus the following fields: `prevClosePrice`, `lastQty`, `bidPrice`, `bidQty`, `askPrice`, `askQty`
+* `GET /api/v3/exchangeInfo` returns new field `cancelReplaceAllowed` in `symbols` list. 
+* `POST /api/v3/order/cancelReplace` added
+    * Cancels an existing order and places a new order on the same symbol.
+    * The filters are evaluated **before** the cancel order is placed.
+        * e.g. If the `MAX_NUM_ORDERS` filter is 10, and the total number of open orders on the account is also 10, when using `POST /api/v3/order/cancelReplace` both the cancel order placement and new order will fail because of the filter.
+    * The change is being rolled out in the next few days, thus this feature will be enabled once the upgrade is completed.
+* New filter `NOTIONAL` has been added.
+    * Defines the allowed notional value (`price * quantity`) based on a configured `minNotional` and `maxNotional`
+* New exchange filter `EXCHANGE_MAX_NUM_ICEBERG_ORDERS` has been added.
+    * Defines the limit of open iceberg orders on an account
+
+WEBSOCKETS
+
+* New symbol ticker streams with 1h and 4h windows:
+    * Individual symbol ticker streams
+        * `<symbol>@ticker_<window-size>`
+    * All market ticker streams
+        * `!ticker_<window-size>@arr`
 
 ## 2022-03-31
 
