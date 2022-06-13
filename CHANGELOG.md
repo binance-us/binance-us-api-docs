@@ -14,7 +14,6 @@ Rest API
     * Cancels an existing order and places a new order on the same symbol.
     * The filters are evaluated **before** the cancel order is placed.
         * e.g. If the `MAX_NUM_ORDERS` filter is 10, and the total number of open orders on the account is also 10, when using `POST /api/v3/order/cancelReplace` both the cancel order placement and new order will fail because of the filter.
-    * The change is being rolled out in the next few days, thus this feature will be enabled once the upgrade is completed.
 * New filter `NOTIONAL` has been added.
     * Defines the allowed notional value (`price * quantity`) based on a configured `minNotional` and `maxNotional`
 * New exchange filter `EXCHANGE_MAX_NUM_ICEBERG_ORDERS` has been added.
