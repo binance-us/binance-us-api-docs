@@ -2,7 +2,7 @@
 
 ## 2022-06-13
 
-SPOT API
+Rest API
 
 * `GET /api/v3/ticker` added
     * Rolling window price change statistics based on `windowSize` provided.
