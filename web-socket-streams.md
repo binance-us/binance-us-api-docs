@@ -409,7 +409,6 @@ As such, the effective window might be up to 1 minute wider that \<window_size\>
 ```
 
 
-
 ## All Market Rolling Window Statistics Streams
 
 Rolling window ticker statistics for all market symbols, computed over multiple windows.
