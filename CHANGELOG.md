@@ -22,7 +22,7 @@ Rest API
 
 WEBSOCKETS
 
-* New symbol ticker streams with 1h and 4h windows:
+* New symbol ticker streams with `1h` and `4h` windows:
     * Individual symbol ticker streams
         * `<symbol>@ticker_<window-size>`
     * All market ticker streams
