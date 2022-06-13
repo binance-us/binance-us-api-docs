@@ -19,6 +19,8 @@
   - [All Market Mini Tickers Stream](#all-market-mini-tickers-stream)
   - [Individual Symbol Ticker Streams](#individual-symbol-ticker-streams)
   - [All Market Tickers Stream](#all-market-tickers-stream)
+  - [Individual Symbol Rolling Window Statistics Streams](#individual-symbol-rolling-window-statistics-streams)
+  - [All Market Rolling Window Statistics Streams](#all-market-rolling-window-statistics-streams)
   - [Individual Symbol Book Ticker Streams](#individual-symbol-book-ticker-streams)
   - [All Book Tickers Stream](#all-book-tickers-stream)
   - [Partial Book Depth Streams](#partial-book-depth-streams)
@@ -351,6 +353,23 @@ m -> minutes; h -> hours; d -> days; w -> weeks; M -> months
 }
 ```
 
+
+## All Market Tickers Stream
+24hr rolling window ticker statistics for all symbols that changed in an array. These are NOT the statistics of the UTC day, but a 24hr rolling window for the previous 24hrs. Note that only tickers that have changed will be present in the array.
+
+**Stream Name:** !ticker@arr
+
+**Update Speed:** 1000ms
+
+**Payload:**
+```javascript
+[
+  {
+    // Same as <symbol>@ticker payload
+  }
+]
+```
+
 ## Individual Symbol Rolling Window Statistics Streams
 
 Rolling window ticker statistics for a single symbol, computed over multiple windows.
@@ -389,21 +408,7 @@ As such, the effective window might be up to 1 minute wider that \<window_size\>
 }
 ```
 
-## All Market Tickers Stream
-24hr rolling window ticker statistics for all symbols that changed in an array. These are NOT the statistics of the UTC day, but a 24hr rolling window for the previous 24hrs. Note that only tickers that have changed will be present in the array.
 
-**Stream Name:** !ticker@arr
-
-**Update Speed:** 1000ms
-
-**Payload:**
-```javascript
-[
-  {
-    // Same as <symbol>@ticker payload
-  }
-]
-```
 
 ## All Market Rolling Window Statistics Streams
 
