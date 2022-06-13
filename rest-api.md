@@ -64,6 +64,7 @@
     - [PERCENT_PRICE_BY_SIDE](#percent_price_by_side)
     - [LOT_SIZE](#lot_size)
     - [MIN_NOTIONAL](#min_notional)
+    - [NOTIONAL](#notional)
     - [ICEBERG_PARTS](#iceberg_parts)
     - [MARKET_LOT_SIZE](#market_lot_size)
     - [MAX_NUM_ORDERS](#max_num_orders)
@@ -74,6 +75,7 @@
   - [Exchange Filters](#exchange-filters)
     - [EXCHANGE_MAX_NUM_ORDERS](#exchange_max_num_orders)
     - [EXCHANGE_MAX_NUM_ALGO_ORDERS](#exchange_max_num_algo_orders)
+    - [EXCHANGE_MAX_NUM_ICEBERG_ORDERS](#exchange_max_num_iceberg_orders)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -2411,6 +2413,31 @@ Since `MARKET` orders have no price, the average price is used over the last `av
 }
 ```
 
+### NOTIONAL
+The `NOTIONAL` filter defines the acceptable notional range allowed for an order on a symbol. <br><br>
+`applyMinToMarket` determines whether the `minNotional` will be applied to `MARKET` orders. <br>
+`applyMaxToMarket` determines whether the `maxNotional` will be applied to `MARKET` orders.
+
+In order to pass this filter, the notional (`price * quantity`) has to pass the following conditions:
+
+* `price * quantity` <= `maxNotional`
+* `price * quantity` >= `minNotional`
+
+For `MARKET` orders, the average price used over the last `avgPriceMins` minutes will be used for calculation. <br>
+If the `avgPriceMins` is 0, then the last price will be used.
+
+**/exchangeInfo format:**
+```javascript
+{
+   "filterType": "NOTIONAL",
+   "minNotional": "10.00000000",
+   "applyMinToMarket": false,
+   "maxNotional": "10000.00000000",
+   "applyMaxToMarket": false,
+   "avgPriceMins": 5
+}
+```
+
 ### ICEBERG_PARTS
 The `ICEBERG_PARTS` filter defines the maximum parts an iceberg order can have. The number of `ICEBERG_PARTS` is defined as `CEIL(qty / icebergQty)`.
 
@@ -2551,5 +2578,16 @@ The `EXCHANGE_MAX_NUM_ALGO_ORDERS` filter defines the maximum number of "algo" o
 {
   "filterType": "EXCHANGE_MAX_NUM_ALGO_ORDERS",
   "maxNumAlgoOrders": 200
+}
+```
+
+### EXCHANGE_MAX_NUM_ICEBERG_ORDERS
+The `EXCHANGE_MAX_NUM_ICEBERG_ORDERS` filter defines the maximum number of iceberg orders an account is allowed to have open on the exchange.
+
+**/exchangeInfo format:**
+```javascript
+{
+  "filterType": "EXCHANGE_MAX_NUM_ICEBERG_ORDERS",
+  "maxNumIcebergOrders": 10000
 }
 ```
