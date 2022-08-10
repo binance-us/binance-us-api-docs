@@ -2376,8 +2376,7 @@ Any of the above variables can be set to 0, which disables that rule in the `pri
 ```
 
 ### PERCENT_PRICE
-The `PERCENT_PRICE` filter defines valid range for a price based on the average of the previous trades.
-`avgPriceMins` is the number of minutes the average price is calculated over. 0 means the last price is used.
+The `PERCENT_PRICE` filter defines the valid range for the price based on the average of the previous trades.
 
 In order to pass the `percent price`, the following must be true for `price`:
 * `price` <= `weightedAveragePrice` * `multiplierUp`
@@ -2394,16 +2393,17 @@ In order to pass the `percent price`, the following must be true for `price`:
 ```
 
 ### PERCENT_PRICE_BY_SIDE
-The `PERCENT_PRICE_BY_SIDE` filter defines the valid range for the price based on the last price of the symbol. <br>
+The `PERCENT_PRICE_BY_SIDE` filter defines the valid range for the price based on the average of the previous trades.
+`avgPriceMins` is the number of minutes the average price is calculated over. 0 means the last price is used. <br>
 There is a different range depending on whether the order is placed on the `BUY` side or the `SELL` side.
 
 Buy orders will succeed on this filter if:
-* `Order price` <= `bidMultiplierUp` * `lastPrice`
-* `Order price` >= `bidMultiplierDown` * `lastPrice`
+* `Order price` <= `weightedAveragePrice` * `bidMultiplierUp`
+* `Order price` >= `weightedAveragePrice` * `bidMultiplierDown`
 
 Sell orders will succeed on this filter if:
-* `Order Price` <= `askMultiplierUp` * `lastPrice`
-* `Order Price` >= `askMultiplierDown` * `lastPrice`
+* `Order Price` <= `weightedAveragePrice` * `askMultiplierUp`
+* `Order Price` >= `weightedAveragePrice` * `askMultiplierDown`
 
 **/exchangeInfo format:**
 ```javascript
