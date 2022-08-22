@@ -3,6 +3,8 @@
 
 ## 2022-08-22
 
+Note that these are rolling changes, so it may take a few days for it to rollout to all our servers.
+
 * Changes to `GET /api/v3/ticker` and `GET /api/v3/ticker/24hr`
     * New optional parameter `type` added
     * Supported values for parameter `type` are `FULL` and `MINI`
