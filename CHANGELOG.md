@@ -1,4 +1,17 @@
-# CHANGELOG for Binance's API (2022-06-20)
+# CHANGELOG for Binance's API (2022-08-22)
+
+
+## 2022-08-22
+
+* Changes to `GET /api/v3/ticker` and `GET /api/v3/ticker/24hr`
+    * New optional parameter `type` added
+    * Supported values for parameter `type` are `FULL` and `MINI`
+        * `FULL` is the default value and the response that is currently being returned from the endpoint
+        * `MINI` omits the following fields from the response: `priceChangePercent`, `weightedAvgPrice`, `bidPrice`, `bidQty`, `askPrice`, `askQty`, and `lastQty`
+* New error code `-1008` 
+    * This is sent whenever the servers are overloaded with requests.
+* New field `brokered` has been added to `GET /api/v3/account`
+* New kline interval: `1s`
 
 ---
 
