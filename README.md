@@ -18,6 +18,6 @@ Name | Description
 
 Name | Description
 ------------ | ------------
-[trailing-stop-faq.md](./faqs/trailing-stop-faq.md)   | Detailed Information on the behavior of Trailing Stops on the Rest API
+[trailing-stop-faq.md](./faqs/trailing-stop-faq.md)   | Detailed Information on the behavior of Trailing Stops on the API
 
 
