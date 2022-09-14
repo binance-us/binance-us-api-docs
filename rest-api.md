@@ -60,7 +60,7 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# Public Rest API for Binance (2022-08-22)
+# Public Rest API for Binance (2022-09-14)
 # General API Information
 * The base endpoint is: **https://api.binance.us**
 * All endpoints return either a JSON object or array.
@@ -473,8 +473,12 @@ There are 3 possible options:
 |------|------|
 |No parameter|curl -X GET "https://api.binance.us/api/v3/exchangeInfo"|
 |symbol|curl -X GET "https://api.binance.us/api/v3/exchangeInfo?symbol=BNBBTC"|
-|symbols|curl -X GET "https://api.binance.us/api/v3/exchangeInfo?symbols=%5B%22BNBBTC%22,%22BTCUSDT%22%5D" or curl -g GET 'https://api.binance.us/api/v3/exchangeInfo?symbols=["BTCUSDT","BNBBTC"]'|
+|symbols|curl -X GET "https://api.binance.us/api/v3/exchangeInfo?symbols=%5B%22BNBBTC%22,%22BTCUSDT%22%5D" or curl -g -X GET 'https://api.binance.us/api/v3/exchangeInfo?symbols=["BTCUSDT","BNBBTC"]'|
+|permissions| curl -X GET "https://api.binance.us/api/v3/exchangeInfo?permissions=["SPOT"]" or curl -g -X GET "https://api.binance.us/api/v3/exchangeInfo?permissions=%5B%22SPOT%22%5D" |
 
+**Notes**:
+* If the value provided `symbol` or `symbols` do not exist, the endpoint will throw an error that the symbol is invalid.
+* All parameters are optional.
 
 **Data Source:**
 Memory
@@ -734,6 +738,7 @@ Database
   ]
 ]
 ```
+
 
 
 ### Current average price
