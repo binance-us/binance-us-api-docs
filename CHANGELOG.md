@@ -84,7 +84,8 @@ REST API
 * Fixed a typo with an error message when an account has disabled permissions (e.g. to withdraw, to trade, etc)
     ```json
     "This action is disabled on this account." 
-```
+    ```
+    
 ---
 
 ## 2022-02-28
