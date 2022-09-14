@@ -1,9 +1,16 @@
-# CHANGELOG for Binance's API (2022-08-22)
+# CHANGELOG for Binance's API (2022-09-14)
 
+
+## 2022-09-13
+
+* Changes to `GET /api/v3/exchangeInfo`
+    * New optional parameter `permissions` added to display all symbols with the permissions matching the value provided. 
+    * If not provided, the default value will be `["SPOT"]`
+    * Cannot be combined with `symbol` or `symbols`
+
+---
 
 ## 2022-08-22
-
-Note that these are rolling changes, so it may take a few days for it to rollout to all our servers.
 
 * Changes to `GET /api/v3/ticker` and `GET /api/v3/ticker/24hr`
     * New optional parameter `type` added
@@ -75,7 +82,7 @@ REST API
 * Fixed a typo with an error message when an account has disabled permissions (e.g. to withdraw, to trade, etc)
     ```json
     "This action is disabled on this account." 
-
+```
 ---
 
 ## 2022-02-28
