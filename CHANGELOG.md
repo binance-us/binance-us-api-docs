@@ -1,7 +1,9 @@
 # CHANGELOG for Binance's API (2022-09-14)
 
 
-## 2022-09-13
+## 2022-09-14
+
+Note that these are rolling changes, so it may take a few days for it to rollout to all our servers.
 
 * Changes to `GET /api/v3/exchangeInfo`
     * New optional parameter `permissions` added to display all symbols with the permissions matching the value provided. 
