@@ -432,7 +432,7 @@ Note that only tickers that have changed will be present in the array.
 ```
 
 ## Individual Symbol Book Ticker Streams
-Pushes any update to the best bid or ask's price or quantity in real-time for a specified symbol.
+Pushes any update to the best bid or ask's price or quantity in real-time for a specified symbol.<br>
 Multiple `<symbol>@bookTicker` streams can be subscribed to over one connection. 
 
 **Stream Name:** \<symbol\>@bookTicker
@@ -453,7 +453,7 @@ Multiple `<symbol>@bookTicker` streams can be subscribed to over one connection.
 
 ## All Book Tickers Stream
 
-**Note:** This feature is scheduled to be removed around **November 2022**. Once this has been removed, please use `<symbol>@bookTicker` instead. Multiple `<symbol>@bookTicker` streams can be subscribed to over one connection. 
+**Note:** This feature is scheduled to be removed around **November 2022**. <br> Once this has been removed, please use `<symbol>@bookTicker` instead. <br> Multiple `<symbol>@bookTicker` streams can be subscribed to over one connection. 
 
 Pushes any update to the best bid or ask's price or quantity in real-time for all symbols.
 
