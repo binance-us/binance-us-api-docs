@@ -21,3 +21,8 @@ Name | Description
 [trailing-stop-faq.md](./faqs/trailing-stop-faq.md)   | Detailed Information on the behavior of Trailing Stops on the API
 
 
+# Contact Us
+
+* [Binance US API Telegram Group](https://t.me/BinanceUS_API)
+	* For any help with technical support
+
