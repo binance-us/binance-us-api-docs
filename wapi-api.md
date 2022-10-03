@@ -1,3 +1,11 @@
+# WAPI has now been deprecated
+
+As of September 30, 2022, the [WAPI endpoints have been deprecated](https://support.binance.us/hc/en-us/articles/8214790365079).
+
+All users must switch from WAPI to SAPI endpoints. The list of SAPI endpoints can be found at: https://docs.binance.us/
+
+Updates regarding User Data Streams, Websockets , and any /api/v3/* endpoints will still be updated in this repository.
+
 # Public WAPI for Binance (2020-10-29)
 # General API Information
 * The base endpoint is: **https://api.binance.us**
