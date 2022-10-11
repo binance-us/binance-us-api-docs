@@ -53,7 +53,9 @@ Any of the above variables can be set to 0, which disables that rule in the `pri
 ```
 
 ### PERCENT_PRICE
+
 The `PERCENT_PRICE` filter defines the valid range for the price based on the average of the previous trades.
+`avgPriceMins` is the number of minutes the average price is calculated over. 0 means the last price is used.
 
 In order to pass the `percent price`, the following must be true for `price`:
 * `price` <= `weightedAveragePrice` * `multiplierUp`
