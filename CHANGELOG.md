@@ -18,7 +18,7 @@
     * Previous behavior: `startTime` and `endTime` had to be used in combination and could only be an hour apart.
     * New behavior: `startTime` and `endTime` can be used individually and the 1 hour limit has been removed.
         * When using `startTime` only, this will return trades from that time, up to the `limit` provided.
-        * When using `endTime` only, this will return trades up to that time up to the `limit` provided.
+        * When using `endTime` only, this will return trades starting from the `endTime` including all trades before that time, up to the limit provided.
         * If `limit` not provided, regardless of used in combination or sent individually, the endpoint will use the default limit.
 * Changes to `GET /api/v3/myTrades`
     * Bug fix where where combining `symbol` + `orderId` combination would returns all trades even if the number of trades went beyond the `500` default limit.
