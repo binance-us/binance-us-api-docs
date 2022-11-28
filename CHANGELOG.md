@@ -27,7 +27,7 @@ REST API
         * When using `endTime` only, this will return trades starting from the `endTime` including all trades before that time, up to the limit provided.
         * If `limit` not provided, regardless of used in combination or sent individually, the endpoint will use the default limit.
 * Changes to `GET /api/v3/myTrades`
-    * Bug fix where where combining `symbol` + `orderId` combination would returns all trades even if the number of trades went beyond the `500` default limit.
+    * Fixed a Bug where combining `symbol` + `orderId` combination would returns all trades even if the number of trades went beyond the `500` default limit. Now if this combination is used the trade will not go beyond the default `limit`.
     * New behavior when sending combination of optional parameters that were not supported:
         * Previous behavior: The API would send specific error messages depending on the combination of parameters sent. Eg.
         ```json
