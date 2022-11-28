@@ -8,6 +8,7 @@ WEBSOCKET
 
 *  `!bookTicker` has been removed. Please use the Individual Book Ticker Streams instead. (`<symbol>@bookTicker`).
     * Multiple `<symbol>@bookTicker` streams can be subscribed to over one connection. (E.g. `wss://stream.binance.us:9443/stream?streams=btcusdt@bookTicker/bnbbtc@bookTicker`)
+    * This removal will take effect **TOMORROW (2022-11-29)**.
 
 REST API 
 
