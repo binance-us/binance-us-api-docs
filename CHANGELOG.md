@@ -4,6 +4,13 @@
 
 **Notice:** These changes are being rolled out gradually to all our servers, and will take approximately a week to complete.
 
+WEBSOCKET
+
+*  `!bookTicker` has been removed. Please use the Individual Book Ticker Streams instead. (`<symbol>@bookTicker`).
+    * Multiple `<symbol>@bookTicker` streams can be subscribed to over one connection. (E.g. `wss://stream.binance.us:9443/stream?streams=btcusdt@bookTicker/bnbbtc@bookTicker`)
+
+REST API 
+
 * New error code `-1135`
     * This error code will occur if a parameter requiring a JSON object is invalid.
 * New error code `-1108`
@@ -12,8 +19,6 @@
         * `POST /api/v3/order`
         * `POST /api/v3/order/cancelReplace`
         * `POST /api/v3/order/oco`
-*  `!bookTicker` has been removed. Please use the Individual Book Ticker Streams instead. (`<symbol>@bookTicker`).
-        * Multiple `<symbol>@bookTicker` streams can be subscribed to over one connection. (E.g. `wss://stream.binance.com:9443/stream?streams=btcusdt@bookTicker/bnbbtc@bookTicker`)
 * Changes to `GET /api/v3/aggTrades`
     * Previous behavior: `startTime` and `endTime` had to be used in combination and could only be an hour apart.
     * New behavior: `startTime` and `endTime` can be used individually and the 1 hour limit has been removed.
@@ -136,7 +141,7 @@ Scheduled changes to the removal of `!bookTicker` around November 2022.
 * More details of the actual removal date will be announced at a later time.
 * Please use the Individual Book Ticker Streams instead. (`<symbol>@bookTicker`)
 * Multiple `<symbol>@bookTicker` streams can be subscribed to over one connection. 
-    * Example: wss://stream.binance.com:9443/stream?streams=btcusdt@bookTicker/bnbbtc@bookTicker
+    * Example: wss://stream.binance.us:9443/stream?streams=btcusdt@bookTicker/bnbbtc@bookTicker
 
 ---
 
