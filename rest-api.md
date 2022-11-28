@@ -60,7 +60,7 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# Public Rest API for Binance (2022-10-11)
+# Public Rest API for Binance (2022-11-28)
 # General API Information
 * The base endpoint is: **https://api.binance.us**
 * All endpoints return either a JSON object or array.
@@ -534,6 +534,10 @@ Memory
   ],
   "permissions": [
      "SPOT"
+  ],
+  "defaultSelfTradePreventionMode": "NONE",
+  "allowedSelfTradePreventionModes": [
+     "NONE"
   ]
 }
 ```
@@ -673,7 +677,6 @@ startTime | LONG | NO | Timestamp in ms to get aggregate trades from INCLUSIVE.
 endTime | LONG | NO | Timestamp in ms to get aggregate trades until INCLUSIVE.
 limit | INT | NO | Default 500; max 1000.
 
-* If both startTime and endTime are sent, time between startTime and endTime must be less than 1 hour.
 * If fromId, startTime, and endTime are not sent, the most recent aggregate trades will be returned.
 
 **Data Source:**
@@ -1410,7 +1413,9 @@ Matching Engine
   "status": "FILLED",
   "timeInForce": "GTC",
   "type": "MARKET",
-  "side": "SELL"
+  "side": "SELL",
+  "workingTime":1507725176595,
+  "selfTradePreventionMode": "NONE"
 }
 ```
 
@@ -1430,6 +1435,8 @@ Matching Engine
   "timeInForce": "GTC",
   "type": "MARKET",
   "side": "SELL",
+  "workingTime":1507725176595,
+  "selfTradePreventionMode": "NONE"
   "fills": [
     {
       "price": "4000.00000000",
@@ -1539,7 +1546,9 @@ Memory => Database
   "time": 1499827319559,
   "updateTime": 1499827319559,
   "isWorking": true,
-  "origQuoteOrderQty": "0.000000"
+  "origQuoteOrderQty": "0.000000",
+  "workingTime":1507725176595,
+  "selfTradePreventionMode": "NONE"
 }
 ```
 
@@ -1583,7 +1592,8 @@ Matching Engine
   "status": "CANCELED",
   "timeInForce": "GTC",
   "type": "LIMIT",
-  "side": "BUY"
+  "side": "BUY",
+  "selfTradePreventionMode": "NONE"
 }
 ```
 
@@ -1672,7 +1682,8 @@ Matching Engine
     "status": "CANCELED",
     "timeInForce": "GTC",
     "type": "LIMIT",
-    "side": "SELL"
+    "side": "SELL",
+    "selfTradePreventionMode": "NONE"
   },
   "newOrderResponse": {
     "symbol": "BTCUSDT",
@@ -1688,7 +1699,9 @@ Matching Engine
     "timeInForce": "GTC",
     "type": "LIMIT",
     "side": "BUY",
-    "fills": []
+    "workingTime": 1652928801803,
+    "fills": [],
+    "selfTradePreventionMode": "NONE"
   }
 }
 ```
@@ -1731,7 +1744,8 @@ Matching Engine
       "status": "CANCELED",
       "timeInForce": "GTC",
       "type": "LIMIT_MAKER",
-      "side": "SELL"
+      "side": "SELL",
+      "selfTradePreventionMode": "NONE"
     },
     "newOrderResponse": {
       "code": -2010,
@@ -1830,7 +1844,9 @@ Memory => Database
     "time": 1499827319559,
     "updateTime": 1499827319559,
     "isWorking": true,
-    "origQuoteOrderQty": "0.000000"
+    "origQuoteOrderQty": "0.000000",
+    "workingTime": 1499827319559,
+    "selfTradePreventionMode": "NONE"
   }
 ]
 ```
@@ -1885,7 +1901,9 @@ Database
     "time": 1499827319559,
     "updateTime": 1499827319559,
     "isWorking": true,
-    "origQuoteOrderQty": "0.000000"
+    "origQuoteOrderQty": "0.000000",
+    "workingTime": 1499827319559,
+    "selfTradePreventionMode": "NONE"
   }
 ]
 ```
@@ -1973,7 +1991,9 @@ Matching Engine
       "timeInForce": "GTC",
       "type": "STOP_LOSS",
       "side": "BUY",
-      "stopPrice": "0.960664"
+      "stopPrice": "0.960664",
+      "workingTime": -1,
+      "selfTradePreventionMode": "NONE"
     },
     {
       "symbol": "LTCBTC",
@@ -1988,7 +2008,9 @@ Matching Engine
       "status": "NEW",
       "timeInForce": "GTC",
       "type": "LIMIT_MAKER",
-      "side": "BUY"
+      "side": "BUY",
+      "workingTime": 1563417480525,
+      "selfTradePreventionMode": "NONE"
     }
   ]
 }
@@ -2061,7 +2083,8 @@ Matching Engine
       "timeInForce": "GTC",
       "type": "STOP_LOSS_LIMIT",
       "side": "SELL",
-      "stopPrice": "1.00000000"
+      "stopPrice": "1.00000000",
+      "selfTradePreventionMode": "NONE"
     },
     {
       "symbol": "LTCBTC",
@@ -2076,7 +2099,8 @@ Matching Engine
       "status": "CANCELED",
       "timeInForce": "GTC",
       "type": "LIMIT_MAKER",
-      "side": "SELL"
+      "side": "SELL",
+      "selfTradePreventionMode": "NONE"
     }
   ]
 }
@@ -2277,10 +2301,17 @@ Database
   "takerCommission": 15,
   "buyerCommission": 0,
   "sellerCommission": 0,
+   "commissionRates": {
+    "maker": "0.00150000",
+    "taker": "0.00150000",
+    "buyer": "0.00000000",
+    "seller": "0.00000000"
+  },
   "canTrade": true,
   "canWithdraw": true,
   "canDeposit": true,
   "brokered": false,
+  "requireSelfTradePrevention": false,
   "updateTime": 123456789,
   "accountType": "SPOT",
   "balances": [
@@ -2320,12 +2351,46 @@ startTime | LONG | NO |
 endTime | LONG | NO |
 fromId | LONG | NO | TradeId to fetch from. Default gets most recent trades.
 limit | INT | NO | Default 500; max 1000.
-recvWindow | LONG | NO | The value cannot be greater than ```60000```
+recvWindow | LONG | NO | The value cannot be greater than `60000`
 timestamp | LONG | YES |
 
 **Notes:**
 * If `fromId` is set, it will get trades >= that `fromId`.
 Otherwise most recent trades are returned.
+
+* These are the supported combinations of **optional** parameters:
+
+  * `symbol`
+  * `orderId`
+  * `fromId`
+  * `startTime`
+  * `endTime`
+  * `symbol` + `orderId`
+  * `symbol` + `fromId`
+  * `symbol` + `startTime`
+  * `symbol` + `endTime`
+  * `orderId` + `fromId`
+  * `orderId` + `startTime`
+  * `orderId` + `endTime`
+  * `fromId` + `startTime`
+  * `fromId` + `endTime`
+  * `startTime` + `endTime`
+  * `symbol` + `orderId` + `fromId`
+  * `symbol` + `orderId` + `startTime`
+  * `symbol` + `orderId` + `endTime`
+  * `symbol` + `fromId` + `startTime`
+  * `symbol` + `fromId` + `endTime`
+  * `symbol` + `startTime` + `endTime`
+  * `orderId` + `fromId` + `startTime`
+  * `orderId` + `fromId` + `endTime`
+  * `orderId` + `startTime` + `endTime`
+  * `fromId` + `startTime` + `endTime`
+  * `symbol` + `orderId` + `fromId` + `startTime`
+  * `symbol` + `orderId` + `fromId` + `endTime`
+  * `symbol` + `orderId` + `startTime` + `endTime`
+  * `symbol` + `fromId` + `startTime` + `endTime`
+  * `orderId` + `fromId` + `startTime` + `endTime`
+  * `symbol` + `orderId` + `fromId` + `startTime` + `endTime`
 
 **Data Source:**
 Memory => Database
