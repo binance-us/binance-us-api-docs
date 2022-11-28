@@ -195,7 +195,7 @@ This code is sent when either the cancellation of the order failed or the new or
 
 This code is sent when both the cancellation of the order failed and the new order placement failed.
 
-## -9xxx Filter failures
+## Filter failures
 Error message | Description
 ------------ | ------------
 "Filter failure: PRICE_FILTER" | `price` is too high, too low, and/or not following the tick size rule for the symbol.
