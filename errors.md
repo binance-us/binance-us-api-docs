@@ -1,4 +1,4 @@
-# Error codes for Binance (2022-08-22)
+# Error codes for Binance (2022-11-28)
 Errors consist of two parts: an error code and a message. Codes are universal,
  but messages can vary. Here is the error JSON payload:
 ```javascript
@@ -85,6 +85,9 @@ Errors consist of two parts: an error code and a message. Codes are universal,
  * A parameter was sent when not required.
  * Parameter '%s' sent when not required.
 
+#### -1108 PARAM_OVERFLOW
+ * Parameter '%s' overflowed.
+
 #### -1111 BAD_PRECISION
  * Precision is over the maximum defined for this asset.
 
@@ -128,6 +131,10 @@ Errors consist of two parts: an error code and a message. Codes are universal,
 #### -1130 INVALID_PARAMETER
  * Invalid data sent for a parameter.
  * Data sent for parameter '%s' is not valid.
+
+#### -1135 INVALID_JSON
+ * Invalid JSON Request
+ * JSON sent for parameter '%s' is not valid
 
 #### -2010 NEW_ORDER_REJECTED
  * NEW_ORDER_REJECTED

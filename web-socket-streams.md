@@ -22,14 +22,13 @@
   - [Individual Symbol Rolling Window Statistics Streams](#individual-symbol-rolling-window-statistics-streams)
   - [All Market Rolling Window Statistics Streams](#all-market-rolling-window-statistics-streams)
   - [Individual Symbol Book Ticker Streams](#individual-symbol-book-ticker-streams)
-  - [All Book Tickers Stream](#all-book-tickers-stream)
   - [Partial Book Depth Streams](#partial-book-depth-streams)
   - [Diff. Depth Stream](#diff-depth-stream)
   - [How to manage a local order book correctly](#how-to-manage-a-local-order-book-correctly)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# Web Socket Streams for Binance (2022-09-30)
+# Web Socket Streams for Binance (2022-11-28)
 # General WSS information
 * The base endpoint is: **wss://stream.binance.us:9443**
 * Streams can be accessed either in a single raw stream or in a combined stream
@@ -450,24 +449,6 @@ Multiple `<symbol>@bookTicker` streams can be subscribed to over one connection.
   "A":"40.66000000"  // best ask qty
 }
 ```
-
-## All Book Tickers Stream
-
-**Note:** This feature is scheduled to be removed around **November 2022**. <br> Once this has been removed, please use `<symbol>@bookTicker` instead. <br> Multiple `<symbol>@bookTicker` streams can be subscribed to over one connection. 
-
-Pushes any update to the best bid or ask's price or quantity in real-time for all symbols.
-
-**Stream Name:** !bookTicker
-
-**Update Speed:** Real-time
-
-**Payload:**
-```javascript
-{
-  // Same as <symbol>@bookTicker payload
-}
-```
-
 
 ## Partial Book Depth Streams
 Top **\<levels\>** bids and asks, pushed every second. Valid **\<levels\>** are 5, 10, or 20.
