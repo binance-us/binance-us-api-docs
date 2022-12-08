@@ -68,7 +68,7 @@ REST API
         * `symbol` + `orderId` + `startTime` + `endTime`
         * `symbol` + `fromId` + `startTime` + `endTime`
         * `orderId` + `fromId` + `startTime` + `endTime`
-        * `symbol` + `orderID` + `fromId` + `startTime` + `endTime`
+        * `symbol` + `orderId` + `fromId` + `startTime` + `endTime`
 
 **Note:** These new fields will appear approximately a week from the release date.
 
