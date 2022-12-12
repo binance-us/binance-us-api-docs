@@ -37,7 +37,12 @@ REST API
         ```json
         { "code": -1128, "msg": "Combination of optional parameters invalid." }
         ```
-    * These are the supported combinations of **optional** parameters:
+    * Added a new combination of supported parameters: `symbol` + `orderId` + `fromId`.
+    * The following combinations of parameters were previously supported but now **removed**.
+        * `symbol` + `fromId` + `startTime`
+        * `symbol` + `fromId` + `endTime`
+        * `symbol` + `fromId` + `startTime` + `endTime`
+    * Thus, these are the supported combinations of parameters:
         * `symbol`
         * `symbol` + `orderId`
         * `symbol` + `startTime`
