@@ -53,6 +53,7 @@
     - [Account information (USER_DATA)](#account-information-user_data)
     - [Account trade list (USER_DATA)](#account-trade-list-user_data)
     - [Query Current Order Count Usage (TRADE)](#query-current-order-count-usage-trade)
+    - [Query Prevented Matches (USER_DATA)](#query-prevented-matches-user_data)
   - [User data stream endpoints](#user-data-stream-endpoints)
     - [Start user data stream (USER_STREAM)](#start-user-data-stream-user_stream)
     - [Keepalive user data stream (USER_STREAM)](#keepalive-user-data-stream-user_stream)
@@ -60,7 +61,7 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# Public Rest API for Binance (2022-11-28)
+# Public Rest API for Binance (2023-01-24)
 # General API Information
 * The base endpoint is: **https://api.binance.us**
 * All endpoints return either a JSON object or array.
@@ -308,9 +309,10 @@ Status | Description
 `PARTIALLY_FILLED`| A part of the order has been filled.
 `FILLED` | The order has been completed.
 `CANCELED` | The order has been canceled by the user.
-` PENDING_CANCEL` | Currently unused
+`PENDING_CANCEL` | Currently unused
 `REJECTED`       | The order was not accepted by the engine and not processed.
 `EXPIRED` | The order was canceled according to the order type's rules (e.g. LIMIT FOK orders with no fill, LIMIT IOC or MARKET orders that partially fill) <br> or by the exchange, (e.g. orders canceled during liquidation, orders canceled during maintenance)
+`EXPIRED_IN_MATCH` | The order was canceled by the exchange due to STP trigger. (e.g. an order with `EXPIRE_TAKER` will match with existing orders on the book with the same account or same `tradeGroupId`)
 
 **OCO Status (listStatusType):**
 
@@ -1357,6 +1359,7 @@ stopPrice | DECIMAL | NO | Used with `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFI
 trailingDelta|LONG|NO| Used with `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`, and `TAKE_PROFIT_LIMIT` orders.
 icebergQty | DECIMAL | NO | Used with `LIMIT`, `STOP_LOSS_LIMIT`, and `TAKE_PROFIT_LIMIT` to create an iceberg order.
 newOrderRespType | ENUM | NO | Set the response JSON. `ACK`, `RESULT`, or `FULL`; `MARKET` and `LIMIT` order types default to `FULL`, all other orders default to `ACK`.
+selfTradePreventionMode |ENUM| NO | The allowed enums is dependent on what is configured on the symbol. The possible supported values are `EXPIRE_TAKER`, `EXPIRE_MAKER`, `EXPIRE_BOTH`, `NONE`.
 recvWindow | LONG | NO |The value cannot be greater than ```60000```
 timestamp | LONG | YES |
 
@@ -1652,6 +1655,7 @@ stopPrice|DECIMAL|NO|
 trailingDelta|LONG|NO|
 icebergQty|DECIMAL|NO|
 newOrderRespType|ENUM|NO|Allowed values: <br> `ACK`, `RESULT`, `FULL` <br> `MARKET` and `LIMIT` orders types default to `FULL`; all other orders default to `ACK`
+selfTradePreventionMode |ENUM| NO | The allowed enums is dependent on what is configured on the symbol. The possible supported values are `EXPIRE_TAKER`, `EXPIRE_MAKER`, `EXPIRE_BOTH`, `NONE`.
 recvWindow | LONG | NO | The value cannot be greater than `60000`
 timestamp | LONG | YES |
 
@@ -1936,6 +1940,7 @@ stopLimitPrice|DECIMAL|NO| If provided, `stopLimitTimeInForce` is required.
 stopIcebergQty|DECIMAL|NO|
 stopLimitTimeInForce|ENUM|NO| Valid values are ```GTC```/```FOK```/```IOC```
 newOrderRespType|ENUM|NO| Set the response JSON.
+selfTradePreventionMode |ENUM| NO | The allowed enums is dependent on what is configured on the symbol. The possible supported values are `EXPIRE_TAKER`, `EXPIRE_MAKER`, `EXPIRE_BOTH`, `NONE`.
 recvWindow|LONG|NO| The value cannot be greater than `60000`
 timestamp|LONG|YES|
 
@@ -2328,7 +2333,8 @@ Database
   ],
   "permissions": [
      "SPOT"
-  ]
+  ],
+  "tradeGroupId":2
 }
 ```
 
@@ -2429,6 +2435,63 @@ Memory
     "intervalNum": 1,
     "limit": 200000,
     "count": 0
+  }
+]
+```
+
+### Query Prevented Matches (USER_DATA)
+
+```
+GET /api/v3/myPreventedMatches
+```
+
+Displays the list of orders that were expired because of STP trigger.
+
+These are the combinations supported:
+
+* `symbol` + `preventedMatchId`
+* `symbol` + `orderId`
+* `symbol` + `orderId` + `fromPreventedMatchId` (`limit` will default to 500)
+* `symbol` + `orderId` + `fromPreventedMatchId` + `limit` 
+
+**Parameters:**
+
+Name                | Type   | Mandatory    | Description
+------------        | ----   | ------------ | ------------
+symbol              | STRING | YES          |
+preventedMatchId    |LONG    | NO           | 
+orderId             |LONG    | NO           |
+fromPreventedMatchId|LONG    | NO           |
+limit               |INT     | NO           | Default: `500`; Max: `1000`
+recvWindow          | LONG   | NO           | The value cannot be greater than `60000`
+timestamp           | LONG   | YES          |
+
+**Weight**
+
+Case                            | Weight
+----                            | -----
+If `symbol` is invalid          | 1
+Querying by `preventedMatchId`  | 1
+Querying by `orderId`           | 10 
+
+**Data Source:**
+
+Database
+
+**Response:**
+
+```json
+[
+  {
+    "symbol": "BTCUSDT",
+    "preventedMatchId": 1,
+    "takerOrderId": 5,
+    "makerOrderId": 3,
+    "tradeGroupId": 1,
+    "selfTradePreventionMode": "EXPIRE_MAKER",
+    "price": "1.100000",
+    "makerPreventedQuantity": "1.300000",
+    "transactTime": 1669101687094
   }
 ]
 ```
