@@ -1,4 +1,55 @@
-# CHANGELOG for Binance's API (2022-11-28)
+# CHANGELOG for Binance's API (2023-01-24)
+
+## 2023-01-24
+
+The changes to the system will take place on **January 31, 2023**.
+
+Additional details on the functionality of STP is explained in the [STP FAQ](./faqs/stp_faq.md) document.
+
+Rest API
+
+* Self Trade Prevention (aka STP) will be added to the system. This will prevent orders from matching with orders from the same account, or accounts under the same `tradeGroupId`. The default and allowed modes can be confirmed using `GET /api/v3/exchangeInfo`: 
+```javascript
+"defaultSelfTradePreventionMode": "EXPIRE_MAKER",   //If selfTradePreventionMode not provided, this will be the value passed to the engine
+"allowedSelfTradePreventionModes": [        //What the allowed modes of selfTradePrevention are
+    "EXPIRE_MAKER",
+    "EXPIRE_TAKER",
+    "EXPIRE_BOTH"
+]
+```
+* New order status: `EXPIRED_IN_MATCH` - This means that the order expired due to STP being triggered.
+* New endpoints:
+   * `GET /api/v3/myPreventedMatches` - This queries the orders that expired due to STP being triggered.
+* New optional parameter `selfTradePreventionMode` has been added to the following endpoints:
+    * `POST /api/v3/order`
+    * `POST /api/v3/order/oco`
+    * `POST /api/v3/cancelReplace`
+* New responses that will appear for all order placement endpoints if there was a prevented match (i.e. if an order could have matched with an order of the same account, or the accounts are in the same `tradeGroupId`): 
+    * `tradeGroupId`      - This will only appear if account is configured to a `tradeGroupId` and if there was a prevented match.
+    * `preventedQuantity` - Only appears if there was a prevented match
+    * An array `preventedMatches` with the following fields:
+        * `preventedMatchId`
+        * `makerOrderId`
+        * `price`
+        * `takerPreventedQuantity` - This will only appear if `selfTradePreventionMode` set is `EXPIRE_TAKER` or `EXPIRE_BOTH`.
+        * `makerPreventedQuantity` - This will only appear if `selfTradePreventionMode` set is `EXPIRE_MAKER` or `EXPIRE_BOTH`.
+* New fields `preventedMatchId` and `preventedQuantity` that can appear in the order query endpoints if the order had expired due to STP trigger: 
+    * `GET /api/v3/order`
+    * `GET /api/v3/openOrders`
+    * `GET /api/v3/allOrders`
+* New field `tradeGroupId` will appear in the `GET /api/v3/account` response.
+
+USER DATA STREAM
+
+* New execution Type: `TRADE_PREVENTION`
+* New fields for `executionReport` (These fields will only appear if the order has expired due to STP trigger)
+    * `u` - `tradeGroupId` 
+    * `v` - `preventedMatchId`
+    * `U` - `counterOrderId`
+    * `A` - `preventedQuantity`
+    * `B` - `lastPreventedQuantity`
+
+---
 
 ## 2022-11-28
 
