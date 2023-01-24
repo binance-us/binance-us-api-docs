@@ -19,7 +19,7 @@ Name | Description
 Name | Description
 ------------ | ------------
 [trailing-stop-faq.md](./faqs/trailing-stop-faq.md)   | Detailed Information on the behavior of Trailing Stops on the API
-
+[stp-faq.md](./faqs/stp_faq.md) | Detailed Information on the behavior of Self Trade Prevention (aka STP) on the API
 
 # Contact Us
 
