@@ -1,4 +1,88 @@
-# CHANGELOG for Binance's API (2023-01-24)
+# CHANGELOG for Binance US API (2023-03-08)
+
+## 2023-03-08 
+
+**Notice:** All changes are being rolled out gradually to all our servers, and may take a few days to complete.
+
+GENERAL CHANGES
+
+* The error messages for certain issues have been improved for easier troubleshooting.
+
+<table>
+    <tr>
+        <th>Situation</th>
+        <th>Old Error Message</th>
+        <th>New Error Message</th>
+    </tr>
+    <tr>
+        <td>An account cannot place or cancel an order, due to trading ability disabled.</td>
+        <td rowspan="3">This action is disabled on this account.</td>
+        <td>This account may not place or cancel orders.</td>
+    </tr>
+    <tr>
+        <td>When the permissions configured on the symbol do not match the permissions on the account.</td>
+        <td>This symbol is not permitted for this account.</td>
+    </tr>
+    <tr>
+        <td>When the account tries to place an order on a symbol it has no permissions for.</td>
+        <td>This symbol is restricted for this account.</td>
+    </tr>
+    <tr>
+        <td>Placing an order when <tt>symbol</tt> is not <tt>TRADING</tt>. </td>
+        <td rowspan="2">Unsupported order combination.</td>
+        <td>This order type is not possible in this trading phase.</td>
+    </tr>
+    <tr>
+        <td>Placing an order with <tt>timeinForce</tt>=<tt>IOC</tt> or <tt>FOK</tt> on a trading phase that does not support it.</td>
+        <td>Limit orders require GTC for this phase.</td>
+    </tr>
+</table>
+
+* Fixed error message for querying archived orders: 
+    * Previously, if an archived order (i.e. order with status `CANCELED` or `EXPIRED` where `executedQty` == 0 that occurred in the last 90 days) is queried, the error message would be:
+    ```json
+    {
+        "code": -2013,
+        "msg": "Order does not exist." 
+    }
+    ```
+    * Now, the error message is: 
+    ```json
+    {
+        "code": -2026,
+        "msg": "Order was canceled or expired with no executed qty over 90 days ago and has been archived." 
+    }
+    ```
+* Behavior for API requests with `startTime` and `endTime`:
+    * Previously some requests failed if the `startTime` == `endTime`.
+    * Now, all API requests that accept `startTime` and `endTime` allow the parameters to be equal. This applies to the following requests:
+        * `GET /api/v3/aggTrades`
+        * `GET /api/v3/klines`
+        * `GET /api/v3/allOrderList`
+        * `GET /api/v3/allOrders`
+        * `GET /api/v3/myTrades`
+
+**Note:** The following changes will take effect **approximately one to two days from the release date**, but the rest of the documentation has been updated to reflect the future changes: 
+
+* Changes to Filter Evaluation: 
+    * Previous behavior: `LOT_SIZE` and `MARKET_LOT_SIZE` required that (`quantity` - `minQty`) % `stepSize` == 0. 
+    * New behavior: This has now been changed to (`quantity` % `stepSize`) == 0.
+* Bug fix with reverse `MARKET` orders (i.e. `MARKET` using `quoteOrderQty`):
+    * Previous behavior: Reverse market orders would have the status `FILLED` even if the order was not fully filled. 
+    * New behavior: If the reverse market order did not fully fill due to low liquidity the order status will be `EXPIRED`, and `FILLED` only if the order was completely filled.
+
+REST API
+
+* Changes to `DELETE /api/v3/order` and `POST /api/v3/order/cancelReplace`:
+    * New optional parameter `cancelRestrictions` that determine whether the cancel will succeed if the order status is `NEW` or `PARTIALLY_FILLED`.
+    * If the order cancellation fails due to `cancelRestrictions`, the error will be: 
+    ```json
+    {
+        "code": -2011, 
+        "msg": "Order was not canceled due to cancel restrictions."
+    }
+    ```
+
 
 ## 2023-01-24
 
