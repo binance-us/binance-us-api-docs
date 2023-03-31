@@ -66,7 +66,7 @@ This is a sample of the output request for reference:
 
 ## What is "prevented quantity?"
 
-STP events expire quantity from open orders. The STP modes `EXPIRE_TAKER`, `EXPIRE_MAKER`, and `EXPIRE_BOTH` expire all remaining quantity on the affected orders, resulting in the entire order being expired.
+STP events expire quantity from open orders. The STP modes `EXPIRE_TAKER`, `EXPIRE_MAKER`, and `EXPIRE_BOTH` expire all remaining quantity on the affected orders, resulting in the entire open order being expired.
 
 Prevented quantity is the amount of quantity that is expired due to STP events for a particular order. User stream execution reports for orders involved in STP may have these fields:
 
@@ -80,6 +80,8 @@ Prevented quantity is the amount of quantity that is expired due to STP events f
 `B` is present for execution type `TRADE_PREVENTION`, and is the quantity expired due to that individual STP event.
 
 `A` is the cumulative quantity expired due to STP over the lifetime of the order. For `EXPIRE_TAKER`, `EXPIRE_MAKER`, and `EXPIRE_BOTH` modes this will always be the same value as `B`.
+
+API responses for orders which expired due to STP will also have a `preventedQuantity` field, indicating the cumulative quantity expired due to STP over the lifetime of the order.
 
 While an order is open, the following inequality holds true:
 
@@ -210,7 +212,7 @@ Maker Order 3: symbol=BTCUSDT side=BUY  type=LIMIT quantity=8.1 price=1   selfTr
 Taker Order 1: symbol=BTCUSDT side=SELL type=LIMIT quantity=3   price=1   selfTradePreventionMode=EXPIRE_MAKER
 ```
 
-**Result**: The orders that were on the book will expire due to the STP trigger, and the taker order will go on the book.
+**Result**: The orders that were on the book will expire due to STP, and the taker order will go on the book.
 
 Maker Order 1
 ```json
@@ -606,7 +608,7 @@ Maker Order: symbol=ABCDEF side=BUY  type=LIMIT  quantity=1 price=1  selfTradePr
 Taker Order: symbol=ABCDEF side=SELL type=MARKET quantity=1          selfTradePreventionMode=EXPIRE_MAKER
 ```
 
-**Result**: The existing order expires with the status `EXPIRED_IN_MATCH`, due to the STP trigger.
+**Result**: The existing order expires with the status `EXPIRED_IN_MATCH`, due to STP.
 The new order also expires but with status `EXPIRED`, due to low liquidity on the order book.
 
 Maker Order
