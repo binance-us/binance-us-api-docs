@@ -158,8 +158,6 @@ Orders are updated with the `executionReport` event.
 
 These are fields that appear in the payload only if certain conditions are met.
 
-For additional information on these parameters, please refer to the [Spot Glossary](./faqs/spot_glossary.md).
-
 <table>
   <tr>
     <th>Field</th>
