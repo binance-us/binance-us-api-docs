@@ -38,6 +38,7 @@
     - [Rolling window price change statistics](#rolling-window-price-change-statistics)
   - [Account endpoints](#account-endpoints)
     - [New order  (TRADE)](#new-order--trade)
+      - [Conditional fields in Order Responses](#conditional-fields-in-order-responses)
     - [Test new order (TRADE)](#test-new-order-trade)
     - [Query order (USER_DATA)](#query-order-user_data)
     - [Cancel order (TRADE)](#cancel-order-trade)
