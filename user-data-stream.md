@@ -10,6 +10,7 @@
 - [Web Socket Payloads](#web-socket-payloads)
   - [Account Update](#account-update)
   - [Order Update](#order-update)
+    - [Conditional Fields in Execution Report](#conditional-fields-in-execution-report)
     - [Execution types](#execution-types)
   - [Balance Update](#balance-update)
 
