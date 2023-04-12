@@ -1481,6 +1481,23 @@ Matching Engine
 }
 ```
 
+#### Conditional fields in Order Responses
+
+There are fields in the order responses (e.g. order placement, order query, order cancellation) that appear only if certain conditions are met. 
+
+These fields can apply to OCO Orders.
+
+The fields are listed below:
+
+Field          |Description                                                      |Visibility conditions                                           | Examples |
+----           | -----                                                           | ---                                                            |---       |
+`icebergQty`   | Quantity for the iceberg order | Appears only if the parameter `icebergQty` was sent in the request.| `"icebergQty": "0.00000000"`
+`preventedMatchId` |  When used in combination with `symbol`, can be used to query a prevented match. | Appears only if the order expired due to STP.| `"preventedMatchId": 0`
+`preventedQuantity` | Order quantity that expired due to STP | Appears only if the order expired due to STP. | `"preventedQuantity": "1.200000"`
+`stopPrice`    | Price when the algorithmic order will be triggered | Appears for `STOP_LOSS`, `TAKE_PROFIT`, `STOP_LOSS_LIMIT`, and `TAKE_PROFIT_LIMIT` orders.|`"stopPrice": "23500.00000000"`
+`trailingDelta`| Delta price change required before order activation| Appears for Trailing Stop Orders.|`"trailingDelta": 10`
+`trailingTime` | Time when the trailing order is now active and tracking price changes| Appears only for Trailing Stop Orders.| `"trailingTime": -1`
+
 ### Test new order (TRADE)
 ```
 POST /api/v3/order/test (HMAC SHA256)
@@ -1556,6 +1573,8 @@ Memory => Database
 }
 ```
 
+**Note:** The payload above does not show all fields that can appear. Please refer to [Conditional fields in Order Responses](#conditional-fields-in-order-responses).
+
 ### Cancel order (TRADE)
 ```
 DELETE /api/v3/order  (HMAC SHA256)
@@ -1602,6 +1621,9 @@ Matching Engine
 }
 ```
 
+**Note:** The payload above does not show all fields that can appear. Please refer to [Conditional fields in Order Responses](#conditional-fields-in-order-responses).
+
+
 #### Regarding `cancelRestrictions`
 
 * If the `cancelRestrictions` value is not any of the supported values, the error will be: 
@@ -1618,7 +1640,6 @@ Matching Engine
     "msg": "Order was not canceled due to cancel restrictions."
 }
 ```
-
 
 ### Cancel all Open Orders on a Symbol (TRADE)
 ```
@@ -1825,6 +1846,7 @@ Matching Engine
 }
 ```
 
+**Note:** The payload above does not show all fields that can appear. Please refer to [Conditional fields in Order Responses](#conditional-fields-in-order-responses).
 
 ### Current open orders (USER_DATA)
 ```
@@ -1875,6 +1897,8 @@ Memory => Database
   }
 ]
 ```
+
+**Note:** The payload above does not show all fields that can appear. Please refer to [Conditional fields in Order Responses](#conditional-fields-in-order-responses).
 
 ### All orders (USER_DATA)
 ```
@@ -1932,6 +1956,8 @@ Database
   }
 ]
 ```
+
+**Note:** The payload above does not show all fields that can appear. Please refer to [Conditional fields in Order Responses](#conditional-fields-in-order-responses).
 
 ### New OCO (TRADE)
 
