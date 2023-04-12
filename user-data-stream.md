@@ -10,6 +10,7 @@
 - [Web Socket Payloads](#web-socket-payloads)
   - [Account Update](#account-update)
   - [Order Update](#order-update)
+    - [Conditional Fields in Execution Report](#conditional-fields-in-execution-report)
     - [Execution types](#execution-types)
   - [Balance Update](#balance-update)
 
@@ -138,7 +139,6 @@ Orders are updated with the `executionReport` event.
   "N": null,                     // Commission asset
   "T": 1499405658657,            // Transaction time
   "t": -1,                       // Trade ID
-  "v": 3,                        // Prevented Match Id; This is only visible if the order expired due to STP
   "I": 8641984,                  // Ignore
   "w": true,                     // Is the order on the book?
   "m": false,                    // Is this trade the maker side?
@@ -147,17 +147,62 @@ Orders are updated with the `executionReport` event.
   "Z": "0.00000000",             // Cumulative quote asset transacted quantity
   "Y": "0.00000000",             // Last quote asset transacted quantity (i.e. lastPrice * lastQty)
   "Q": "0.00000000",             // Quote Order Quantity
-  "D": 1668680518494,            // Trailing Time; This is only visible if the trailing stop order has been activated.
   "W": 1499405658657,            // Working Time; This is only visible if the order has been placed on the book.
   "V": "NONE"                    // SelfTradePreventionMode
-  "u":1,                         // TradeGroupId; This is only visible if the account is part of a trade group and the order expired due to STP.
-  "U":37,                        // CounterOrderId; This is only visible if the order expired due to STP.
-  "A":"3.000000",                // Prevented Quantity; This is only visible if the order expired due to STP.
-  "B":"3.000000"                 // Last Prevented Quantity; This is only visible if the order expired due to STP.
 }
 ```
 
 **Note:** Average price can be found by doing `Z` divided by `z`.
+
+### Conditional Fields in Execution Report
+
+These are fields that appear in the payload only if certain conditions are met.
+
+<table>
+  <tr>
+    <th>Field</th>
+    <th>Name</th>
+    <th>Description</th>
+    <th>Examples</th>
+  </tr>
+  <tr>
+    <td><code>d</code></td>
+    <td>Trailing Delta</td>
+    <td rowspan="2">Appears only for trailing stop orders.</td>
+    <td><code>"d": 4</code></td>
+  </tr>
+  <tr>
+    <td><code>D</code></td>
+    <td>Trailing Time</td>
+    <td><code>"D": 1668680518494</code></td>
+  </tr>
+  <tr>
+    <td><code>v</code></td>
+    <td>Prevented Match Id</td>
+    <td rowspan="5">Appears only for orders that expired due to STP.</td>
+    <td><code>"v": 3</code></td>
+  </tr>
+  <tr>
+    <td><code>A</code>
+    <td>Prevented Quantity</td>
+    <td><code>"A":"3.000000"</code></td>
+  </tr>
+  <tr>
+    <td><code>B</code></td>
+    <td>Last Prevented Quantity</td>
+    <td><code>"B":"3.000000"</code></td>
+  </tr>
+  <tr>
+    <td><code>u</code></td>
+    <td>Trade Group Id</td>
+    <td><code>"u":1</code></td>
+  </tr>
+  <tr>
+    <td><code>U</code></td>
+    <td>Counter Order Id</td>
+    <td><code>"U":37</code></td>
+  </tr>
+</table>
 
 If the order is an OCO, an event will be displayed named `ListStatus` in addition to the `executionReport` event.
 
