@@ -1,4 +1,15 @@
-# CHANGELOG for Binance US API (2023-03-08)
+# CHANGELOG for Binance US API (2023-05-12)
+
+## 2023-05-12
+
+* Spot WebSocket API is now available for Binance US.
+    * WebSocket API allows placing orders, canceling orders, etc. through a WebSocket connection.
+    * WebSocket API is a **separate** service from WebSocket Market Data streams. I.e., placing orders and listening to market data requires two separate WebSocket connections.
+    * WebSocket API is subject to the same Filter and Rate Limit rules as REST API.
+    * WebSocket API and REST API are functionally equivalent: they provide the same features, accept the same parameters, return the same status and error codes.
+* The full documentation can be found [here](./web-socket-api.md).
+
+---
 
 ## 2023-03-08 
 
