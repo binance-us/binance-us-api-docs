@@ -281,7 +281,7 @@ See [Error codes](errors.md) for a list of error codes and messages.
 * Current API rate limits can be queried using the [`exchangeInfo`](#exchange-information) request.
 * There are multiple rate limit types across multiple intervals.
 * Responses can indicate current rate limit status in the optional `rateLimits` field.
-* Requests fail with status `429` when rate limits are violated.
+* Requests fail with status `429` when order rate limits or request rate limits are violated.
 
 ### How to interpret rate limits
 
