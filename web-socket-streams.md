@@ -248,7 +248,7 @@ The Kline/Candlestick Stream push updates to the current klines/candlestick ever
 
 **Stream Name:** \<symbol\>@kline_\<interval\>
 
-**Update Speed:** 1000ms for `1s`, 2000ms for the other intervals
+**Update Speed:** 2000ms for the other intervals
 
 **Payload:**
 ```javascript
