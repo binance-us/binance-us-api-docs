@@ -63,7 +63,7 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# Public Rest API for Binance US (2023-03-08)
+# Public Rest API for Binance US (2023-09-06)
 # General API Information
 * The base endpoint is: **https://api.binance.us**
 * All endpoints return either a JSON object or array.
@@ -360,9 +360,8 @@ Status | Description
 
 **Kline/Candlestick chart intervals:**
 
-s-> seconds; m -> minutes; h -> hours; d -> days; w -> weeks; M -> months
+m -> minutes; h -> hours; d -> days; w -> weeks; M -> months
 
-* 1s
 * 1m
 * 3m
 * 5m
