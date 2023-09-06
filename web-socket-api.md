@@ -63,7 +63,7 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# Public WebSocket API for Binance US (2023-05-12)
+# Public WebSocket API for Binance US (2023-09-06)
 
 ## General API Information
 
@@ -1345,7 +1345,6 @@ Supported kline intervals (case-sensitive):
 
 Interval  | `interval` value
 --------- | ----------------
-seconds   | `1s`
 minutes   | `1m`, `3m`, `5m`, `15m`, `30m`
 hours     | `1h`, `2h`, `4h`, `6h`, `8h`, `12h`
 days      | `1d`, `3d`
