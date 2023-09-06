@@ -28,7 +28,7 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# Web Socket Streams for Binance (2022-11-28)
+# Web Socket Streams for Binance (2023-09-06)
 # General WSS information
 * The base endpoint is: **wss://stream.binance.us:9443**
 * Streams can be accessed either in a single raw stream or in a combined stream
@@ -227,10 +227,9 @@ The Trade Streams push raw trade information; each trade has a unique buyer and 
 The Kline/Candlestick Stream push updates to the current klines/candlestick every second.
 
 **Kline/Candlestick chart intervals:**
+ 
+ m -> minutes; h -> hours; d -> days; w -> weeks; M -> months
 
-s-> seconds; m -> minutes; h -> hours; d -> days; w -> weeks; M -> months
-
-* 1s
 * 1m
 * 3m
 * 5m
