@@ -1,4 +1,11 @@
-# CHANGELOG for Binance US API (2023-05-12)
+# CHANGELOG for Binance US API (2023-09-06)
+
+
+## 2023-09-06
+
+- Interval for `1s` klines has been removed from the documentation as it is no longer supported.
+
+---
 
 ## 2023-05-12
 
