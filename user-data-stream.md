@@ -204,7 +204,7 @@ These are fields that appear in the payload only if certain conditions are met.
   </tr>
 </table>
 
-If the order is an OCO, an event will be displayed named `ListStatus` in addition to the `executionReport` event.
+If the order is an OCO, an event named `ListStatus` will be sent in addition to the `executionReport` event.
 
 **Payload**
 ```javascript
